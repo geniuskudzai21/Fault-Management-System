@@ -10,7 +10,7 @@ interface CustomerHeaderProps {
 
 const CustomerHeader: React.FC<CustomerHeaderProps> = ({ user, onLogout, onNotifications }) => {
   return (
-    <header className="h-20 flex items-center justify-between px-6 sticky top-0 z-20" style={{ backgroundColor: 'rgba(0,51,160,0.15)' }}>
+    <header className="h-20 flex items-center justify-between px-6 sticky top-0 z-20" style={{ backgroundColor: 'rgba(10,10,15,0.95)' }}>
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#fed000' }}>
           <img src="/images.jpg" alt="ZESA" className="w-full h-full object-cover" />

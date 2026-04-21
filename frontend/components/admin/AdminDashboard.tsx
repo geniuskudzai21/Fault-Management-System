@@ -114,7 +114,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
   ];
 
   const statCards = [
-    { label: 'Total Users', value: stats.totalUsers, icon: UserIcon, color: '#0033a0', bgColor: 'rgba(0,51,160,0.15)' },
+    { label: 'Total Users', value: stats.totalUsers, icon: UserIcon, color: '#0033a0', bgColor: 'rgba(10,10,15,0.95)' },
     { label: 'Total Faults', value: stats.totalFaults, icon: ExclamationCircleIcon, color: '#dc2626', bgColor: 'rgba(220,38,38,0.15)' },
     { label: 'Pending', value: stats.pendingFaults, icon: ClockIcon, color: '#f59e0b', bgColor: 'rgba(245,158,11,0.15)' },
     { label: 'In Progress', value: stats.inProgressFaults, icon: ListIcon, color: '#8b5cf6', bgColor: 'rgba(139,92,246,0.15)' },
@@ -153,7 +153,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="flex" style={{ backgroundColor: '#0b1326', minHeight: '100vh' }}>
+    <div className="flex" style={{ backgroundColor: 'rgba(10,10,15,0.95)', minHeight: '100vh' }}>
       {/* Mobile Overlay */}
       {mobileMenuOpen && (
         <div 
@@ -165,7 +165,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
       {/* Fixed Sidebar */}
       <aside 
         className={`w-64 flex-shrink-0 fixed inset-y-0 left-0 z-40 overflow-hidden transition-transform duration-300 -translate-x-full lg:translate-x-0 ${mobileMenuOpen ? 'translate-x-0' : ''}`}
-        style={{ backgroundColor: '#0d1a33' }}
+        style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
@@ -259,12 +259,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
             {/* Total Users Card */}
             <div 
               className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
-              style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(0,51,160,0.2)' }}
+              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#0033a0' }}
             >
               <div className="flex items-center gap-4">
                 <div 
                   className="w-12 h-12 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: 'rgba(0,51,160,0.15)' }}
+                  style={{ backgroundColor: '#0033a0' }}
                 >
                   <UserIcon className="w-6 h-6" style={{ color: '#0033a0' }} />
                 </div>
@@ -278,12 +278,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
             {/* Active Faults Card */}
             <div 
               className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
-              style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(245,158,11,0.2)' }}
+              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#f59e0b' }}
             >
               <div className="flex items-center gap-4">
                 <div 
                   className="w-12 h-12 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: 'rgba(245,158,11,0.15)' }}
+                  style={{ backgroundColor: '#f59e0b' }}
                 >
                   <ClockIcon className="w-6 h-6" style={{ color: '#f59e0b' }} />
                 </div>
@@ -297,12 +297,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
             {/* Total Faults Card */}
             <div 
               className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
-              style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(220,38,38,0.2)' }}
+              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#dc2626' }}
             >
               <div className="flex items-center gap-4">
                 <div 
                   className="w-12 h-12 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: 'rgba(220,38,38,0.15)' }}
+                  style={{ backgroundColor: '#dc2626' }}
                 >
                   <ExclamationCircleIcon className="w-6 h-6" style={{ color: '#dc2626' }} />
                 </div>
@@ -316,12 +316,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
             {/* Resolved Card */}
             <div 
               className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
-              style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(16,185,129,0.2)' }}
+              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#10b981' }}
             >
               <div className="flex items-center gap-4">
                 <div 
                   className="w-12 h-12 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: 'rgba(16,185,129,0.15)' }}
+                  style={{ backgroundColor: '#10b981' }}
                 >
                   <CheckCircleIcon className="w-6 h-6" style={{ color: '#10b981' }} />
                 </div>
@@ -335,12 +335,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
             {/* Unresolved Card */}
             <div 
               className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
-              style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(139,92,246,0.2)' }}
+              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#8b5cf6' }}
             >
               <div className="flex items-center gap-4">
                 <div 
                   className="w-12 h-12 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: 'rgba(139,92,246,0.15)' }}
+                  style={{ backgroundColor: '#8b5cf6' }}
                 >
                   <ListIcon className="w-6 h-6" style={{ color: '#8b5cf6' }} />
                 </div>
@@ -355,7 +355,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
           {/* Charts Row */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-8">
             {/* Fault Trends Chart */}
-            <div className="p-6 rounded-2xl" style={{ backgroundColor: '#0d1a33' }}>
+            <div className="p-6 rounded-2xl" style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: 'rgba(0,51,160,0.2)' }}>
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h3 className="text-lg font-semibold text-white">Fault Trends</h3>
@@ -386,7 +386,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </div>
 
             {/* Performance Pie Chart */}
-            <div className="p-6 rounded-2xl" style={{ backgroundColor: '#0d1a33' }}>
+            <div className="p-6 rounded-2xl" style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}>
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-white">Performance</h3>
                 <p className="text-sm mt-1" style={{ color: '#9ca3af' }}>Fault resolution rate</p>
@@ -407,7 +407,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
           {/* Activities and Grid Section */}
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 mt-8">
             {/* Recent Activities Table - Takes 2 columns */}
-            <div className="xl:col-span-2 rounded-2xl overflow-hidden" style={{ backgroundColor: '#0d1a33' }}>
+            <div className="xl:col-span-2 rounded-2xl overflow-hidden" style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}>
               <div className="px-6 py-5 border-b" style={{ borderColor: 'rgba(0,51,160,0.15)' }}>
                 <div>
                   <h3 className="text-lg font-semibold text-white">Recent Activities</h3>
@@ -472,7 +472,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </div>
 
             {/* Grid Stability Component - Takes 1 column */}
-            <div className="rounded-2xl p-6" style={{ backgroundColor: '#0d1a33' }}>
+            <div className="rounded-2xl p-6" style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}>
               <div className="text-center">
                 <h3 className="text-lg font-semibold text-white mb-6">Grid Stability</h3>
                 
