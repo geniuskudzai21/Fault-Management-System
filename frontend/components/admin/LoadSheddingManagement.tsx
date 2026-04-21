@@ -83,7 +83,7 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
 
   if (loading) {
     return (
-      <div className="flex" style={{ backgroundColor: '#0b1326', minHeight: '100vh' }}>
+      <div className="flex" style={{ backgroundColor: 'rgba(10,10,15,0.95)', minHeight: '100vh' }}>
         <div className="flex-1 flex items-center justify-center">
           <div className="w-12 h-12 border-2 border-yellow-400/30 border-t-yellow-400 rounded-full animate-spin"></div>
         </div>
@@ -92,30 +92,33 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
   }
 
   return (
-    <div className="flex" style={{ backgroundColor: '#0b1326', minHeight: '100vh' }}>
+    <div className="flex" style={{ backgroundColor: 'rgba(10,10,15,0.95)', minHeight: '100vh' }}>
       {mobileMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-30 bg-black/50" onClick={() => setMobileMenuOpen(false)} />
       )}
 
       <aside 
         className={`w-64 flex-shrink-0 fixed inset-y-0 left-0 z-40 overflow-hidden transition-transform duration-300 -translate-x-full lg:translate-x-0 ${mobileMenuOpen ? 'translate-x-0' : ''}`}
-        style={{ backgroundColor: '#0d1a33' }}
+        style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}
       >
         <div className="flex flex-col h-full">
           <div className="h-20 flex items-center px-6 border-b" style={{ borderColor: 'rgba(0,51,160,0.15)' }}>
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#fed000' }}>
-              <img src="/images.jpg" alt="ZESA" className="w-full h-full object-cover" />
-            </div>
-            <span className="ml-3 text-lg font-bold text-white tracking-wide">ZESA</span>
           </div>
           <nav className="flex-1 px-4 py-6 space-y-2 overflow-hidden">
             <button
               onClick={onBack}
-              className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg text-white transition-all"
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white transition-all cursor-pointer font-medium"
               style={{ backgroundColor: '#0033a0' }}
             >
               <ArrowLeftIcon className="w-5 h-5" />
               <span>Back to Dashboard</span>
+            </button>
+            <button
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all cursor-pointer font-medium"
+              style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}
+            >
+              <BuildingOfficeIcon className="w-5 h-5" />
+              <span>Schedules</span>
             </button>
           </nav>
           <div className="p-4 border-t" style={{ borderColor: 'rgba(0,51,160,0.15)' }}>
@@ -154,9 +157,15 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-            <div className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border" style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(0,51,160,0.2)' }}>
+            <div 
+              className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
+              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#0033a0' }}
+            >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(0,51,160,0.15)' }}>
+                <div 
+                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{ backgroundColor: '#0033a0' }}
+                >
                   <BuildingOfficeIcon className="w-6 h-6" style={{ color: '#0033a0' }} />
                 </div>
                 <div>
@@ -165,9 +174,15 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
                 </div>
               </div>
             </div>
-            <div className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border" style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(16,185,129,0.2)' }}>
+            <div 
+              className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
+              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#10b981' }}
+            >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(16,185,129,0.15)' }}>
+                <div 
+                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{ backgroundColor: '#10b981' }}
+                >
                   <BuildingOfficeIcon className="w-6 h-6" style={{ color: '#10b981' }} />
                 </div>
                 <div>
@@ -176,9 +191,15 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
                 </div>
               </div>
             </div>
-            <div className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border" style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(107,114,128,0.2)' }}>
+            <div 
+              className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
+              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#6b7280' }}
+            >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(107,114,128,0.15)' }}>
+                <div 
+                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{ backgroundColor: '#6b7280' }}
+                >
                   <BuildingOfficeIcon className="w-6 h-6" style={{ color: '#6b7280' }} />
                 </div>
                 <div>
@@ -189,7 +210,7 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
             </div>
           </div>
 
-          <div className="rounded-2xl p-4 mb-6" style={{ backgroundColor: '#0d1a33' }}>
+          <div className="rounded-2xl p-4 mb-6" style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}>
             <div className="flex flex-col lg:flex-row gap-4">
               <div className="flex-1 relative">
                 <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: '#9ca3af' }} />
@@ -199,14 +220,14 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2.5 rounded-lg border focus:outline-none"
-                  style={{ backgroundColor: '#0b1326', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                  style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
                 />
               </div>
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
                 className="px-4 py-2.5 rounded-lg border focus:outline-none"
-                style={{ backgroundColor: '#0b1326', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
               >
                 <option value="all" style={{ color: 'white' }}>All Status</option>
                 <option value="active" style={{ color: 'white' }}>Active</option>
@@ -215,7 +236,7 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
             </div>
           </div>
 
-          <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: '#0d1a33' }}>
+          <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -276,7 +297,7 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4">
             <div className="fixed inset-0 bg-black/70" onClick={() => setShowAddSchedule(false)} />
-            <div className="relative p-6 border rounded-2xl w-full max-w-md shadow-xl" style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(0,51,160,0.2)' }}>
+            <div className="relative p-6 border rounded-2xl w-full max-w-md shadow-xl" style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: 'rgba(0,51,160,0.2)' }}>
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-white">Add Load Shedding Schedule</h3>
                 <button onClick={() => setShowAddSchedule(false)} className="p-2 rounded-lg hover:bg-white/10" style={{ color: '#9ca3af' }}>
@@ -291,7 +312,7 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
                     value={newSchedule.area}
                     onChange={(e) => setNewSchedule({...newSchedule, area: e.target.value})}
                     className="w-full px-4 py-2.5 rounded-lg border focus:outline-none"
-                    style={{ backgroundColor: '#0b1326', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                    style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -302,7 +323,7 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
                       value={newSchedule.start_time}
                       onChange={(e) => setNewSchedule({...newSchedule, start_time: e.target.value})}
                       className="w-full px-4 py-2.5 rounded-lg border focus:outline-none"
-                      style={{ backgroundColor: '#0b1326', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                      style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
                     />
                   </div>
                   <div>
@@ -312,7 +333,7 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
                       value={newSchedule.end_time}
                       onChange={(e) => setNewSchedule({...newSchedule, end_time: e.target.value})}
                       className="w-full px-4 py-2.5 rounded-lg border focus:outline-none"
-                      style={{ backgroundColor: '#0b1326', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                      style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
                     />
                   </div>
                 </div>
@@ -325,7 +346,7 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
                         onClick={() => handleToggleDay(day)}
                         className="px-3 py-1.5 text-xs rounded-lg transition-colors"
                         style={{ 
-                          backgroundColor: newSchedule.days_of_week.includes(day) ? '#0033a0' : '#0b1326',
+                          backgroundColor: newSchedule.days_of_week.includes(day) ? '#0033a0' : 'rgba(10,10,15,0.95)',
                           borderColor: 'rgba(0,51,160,0.2)',
                           color: newSchedule.days_of_week.includes(day) ? '#fed000' : '#9ca3af',
                           borderWidth: '1px'
@@ -340,7 +361,7 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
                     value={newSchedule.priority}
                     onChange={(e) => setNewSchedule({...newSchedule, priority: e.target.value as 'low' | 'medium' | 'high'})}
                     className="w-full px-4 py-2.5 rounded-lg border focus:outline-none"
-                    style={{ backgroundColor: '#0b1326', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                    style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
                   >
                     <option value="low" style={{ color: 'white' }}>Low</option>
                     <option value="medium" style={{ color: 'white' }}>Medium</option>

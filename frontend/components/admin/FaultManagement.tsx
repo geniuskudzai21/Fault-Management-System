@@ -92,7 +92,7 @@ const FaultManagement: React.FC<FaultManagementProps> = ({
 
   if (loading) {
     return (
-      <div className="flex" style={{ backgroundColor: '#0b1326', minHeight: '100vh' }}>
+      <div className="flex" style={{ backgroundColor: 'rgba(10,10,15,0.95)', minHeight: '100vh' }}>
         <div className="flex-1 flex items-center justify-center">
           <div className="w-12 h-12 border-2 border-yellow-400/30 border-t-yellow-400 rounded-full animate-spin"></div>
         </div>
@@ -101,7 +101,7 @@ const FaultManagement: React.FC<FaultManagementProps> = ({
   }
 
   return (
-    <div className="flex" style={{ backgroundColor: '#0b1326', minHeight: '100vh' }}>
+    <div className="flex" style={{ backgroundColor: 'rgba(10,10,15,0.95)', minHeight: '100vh' }}>
       {mobileMenuOpen && (
         <div 
           className="lg:hidden fixed inset-0 z-30 bg-black/50"
@@ -111,24 +111,27 @@ const FaultManagement: React.FC<FaultManagementProps> = ({
 
       <aside 
         className={`w-64 flex-shrink-0 fixed inset-y-0 left-0 z-40 overflow-hidden transition-transform duration-300 -translate-x-full lg:translate-x-0 ${mobileMenuOpen ? 'translate-x-0' : ''}`}
-        style={{ backgroundColor: '#0d1a33' }}
+        style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}
       >
         <div className="flex flex-col h-full">
           <div className="h-20 flex items-center px-6 border-b" style={{ borderColor: 'rgba(0,51,160,0.15)' }}>
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#fed000' }}>
-              <img src="/images.jpg" alt="ZESA" className="w-full h-full object-cover" />
-            </div>
-            <span className="ml-3 text-lg font-bold text-white tracking-wide">ZESA</span>
           </div>
 
           <nav className="flex-1 px-4 py-6 space-y-2 overflow-hidden">
             <button
               onClick={onBack}
-              className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg text-white transition-all"
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white transition-all cursor-pointer font-medium"
               style={{ backgroundColor: '#0033a0' }}
             >
               <ArrowLeftIcon className="w-5 h-5" />
               <span>Back to Dashboard</span>
+            </button>
+            <button
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all cursor-pointer font-medium"
+              style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}
+            >
+              <ListIcon className="w-5 h-5" />
+              <span>Faults</span>
             </button>
           </nav>
 
@@ -163,10 +166,13 @@ const FaultManagement: React.FC<FaultManagementProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
             <div 
               className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
-              style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(220,38,38,0.2)' }}
+              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#dc2626' }}
             >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(220,38,38,0.15)' }}>
+                <div 
+                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{ backgroundColor: '#dc2626' }}
+                >
                   <ListIcon className="w-6 h-6" style={{ color: '#dc2626' }} />
                 </div>
                 <div>
@@ -178,10 +184,13 @@ const FaultManagement: React.FC<FaultManagementProps> = ({
 
             <div 
               className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
-              style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(59,130,246,0.2)' }}
+              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#3b82f6' }}
             >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(59,130,246,0.15)' }}>
+                <div 
+                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{ backgroundColor: '#3b82f6' }}
+                >
                   <ClockIcon className="w-6 h-6" style={{ color: '#3b82f6' }} />
                 </div>
                 <div>
@@ -193,10 +202,13 @@ const FaultManagement: React.FC<FaultManagementProps> = ({
 
             <div 
               className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
-              style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(245,158,11,0.2)' }}
+              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#f59e0b' }}
             >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(245,158,11,0.15)' }}>
+                <div 
+                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{ backgroundColor: '#f59e0b' }}
+                >
                   <ExclamationCircleIcon className="w-6 h-6" style={{ color: '#f59e0b' }} />
                 </div>
                 <div>
@@ -208,10 +220,13 @@ const FaultManagement: React.FC<FaultManagementProps> = ({
 
             <div 
               className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
-              style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(16,185,129,0.2)' }}
+              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#10b981' }}
             >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(16,185,129,0.15)' }}>
+                <div 
+                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{ backgroundColor: '#10b981' }}
+                >
                   <CheckCircleIcon className="w-6 h-6" style={{ color: '#10b981' }} />
                 </div>
                 <div>
@@ -222,7 +237,7 @@ const FaultManagement: React.FC<FaultManagementProps> = ({
             </div>
           </div>
 
-          <div className="rounded-2xl p-4 mb-6" style={{ backgroundColor: '#0d1a33' }}>
+          <div className="rounded-2xl p-4 mb-6" style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}>
             <div className="flex flex-col lg:flex-row gap-4">
               <div className="flex-1 relative">
                 <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: '#9ca3af' }} />
@@ -232,14 +247,14 @@ const FaultManagement: React.FC<FaultManagementProps> = ({
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2.5 rounded-lg border focus:outline-none"
-                  style={{ backgroundColor: '#0b1326', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                  style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
                 />
               </div>
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
                 className="px-4 py-2.5 rounded-lg border focus:outline-none"
-                style={{ backgroundColor: '#0b1326', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
               >
                 <option value="all" style={{ color: 'white' }}>All Status</option>
                 <option value="Reported" style={{ color: 'white' }}>Reported</option>
@@ -250,7 +265,7 @@ const FaultManagement: React.FC<FaultManagementProps> = ({
                 value={selectedPriority}
                 onChange={(e) => setSelectedPriority(e.target.value)}
                 className="px-4 py-2.5 rounded-lg border focus:outline-none"
-                style={{ backgroundColor: '#0b1326', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
               >
                 <option value="all" style={{ color: 'white' }}>All Priorities</option>
                 <option value="High" style={{ color: 'white' }}>High</option>
@@ -260,7 +275,7 @@ const FaultManagement: React.FC<FaultManagementProps> = ({
             </div>
           </div>
 
-          <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: '#0d1a33' }}>
+          <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -330,7 +345,7 @@ const FaultManagement: React.FC<FaultManagementProps> = ({
                                 }
                               }}
                               className="px-2 py-1.5 rounded-lg border text-xs"
-                              style={{ backgroundColor: '#0b1326', borderColor: 'rgba(0,51,160,0.2)', color: 'white' }}
+                              style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white' }}
                               disabled={updatingFault === fault.id}
                             >
                               <option value="">Assign Tech</option>

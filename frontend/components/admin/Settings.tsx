@@ -70,7 +70,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onBack }) => {
 
   if (loading) {
     return (
-      <div className="flex" style={{ backgroundColor: '#0b1326', minHeight: '100vh' }}>
+      <div className="flex" style={{ backgroundColor: 'rgba(10,10,15,0.95)', minHeight: '100vh' }}>
         <div className="flex-1 flex items-center justify-center">
           <div className="w-12 h-12 border-2 border-yellow-400/30 border-t-yellow-400 rounded-full animate-spin"></div>
         </div>
@@ -79,7 +79,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onBack }) => {
   }
 
   return (
-    <div className="flex" style={{ backgroundColor: '#0b1326', minHeight: '100vh' }}>
+    <div className="flex" style={{ backgroundColor: 'rgba(10,10,15,0.95)', minHeight: '100vh' }}>
       {mobileMenuOpen && (
         <div 
           className="lg:hidden fixed inset-0 z-30 bg-black/50"
@@ -89,24 +89,27 @@ const Settings: React.FC<SettingsProps> = ({ user, onBack }) => {
 
       <aside 
         className={`w-64 flex-shrink-0 fixed inset-y-0 left-0 z-40 overflow-hidden transition-transform duration-300 -translate-x-full lg:translate-x-0 ${mobileMenuOpen ? 'translate-x-0' : ''}`}
-        style={{ backgroundColor: '#0d1a33' }}
+        style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}
       >
         <div className="flex flex-col h-full">
           <div className="h-20 flex items-center px-6 border-b" style={{ borderColor: 'rgba(0,51,160,0.15)' }}>
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#fed000' }}>
-              <img src="/images.jpg" alt="ZESA" className="w-full h-full object-cover" />
-            </div>
-            <span className="ml-3 text-lg font-bold text-white tracking-wide">ZESA</span>
           </div>
 
           <nav className="flex-1 px-4 py-6 space-y-2 overflow-hidden">
             <button
               onClick={onBack}
-              className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg text-white transition-all"
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white transition-all cursor-pointer font-medium"
               style={{ backgroundColor: '#0033a0' }}
             >
               <ArrowLeftIcon className="w-5 h-5" />
               <span>Back to Dashboard</span>
+            </button>
+            <button
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all cursor-pointer font-medium"
+              style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}
+            >
+              <SettingsIcon className="w-5 h-5" />
+              <span>Settings</span>
             </button>
           </nav>
 
@@ -146,7 +149,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onBack }) => {
             </button>
           </div>
 
-          <div className="rounded-2xl mb-6" style={{ backgroundColor: '#0d1a33' }}>
+          <div className="rounded-2xl mb-6" style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}>
             <div className="flex border-b" style={{ borderColor: 'rgba(0,51,160,0.15)' }}>
               {['general', 'notifications', 'categories', 'advanced'].map((tab) => (
                 <button
@@ -165,7 +168,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onBack }) => {
           </div>
 
           {activeTab === 'general' && (
-            <div className="rounded-2xl p-6" style={{ backgroundColor: '#0d1a33' }}>
+            <div className="rounded-2xl p-6" style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium mb-2" style={{ color: '#9ca3af' }}>Site Name</label>
@@ -174,7 +177,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onBack }) => {
                     value={settings.site_name}
                     onChange={(e) => setSettings({...settings, site_name: e.target.value})}
                     className="w-full px-4 py-2.5 rounded-lg border focus:outline-none"
-                    style={{ backgroundColor: '#0b1326', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                    style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
                   />
                 </div>
                 <div>
@@ -184,7 +187,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onBack }) => {
                     value={settings.contact_email}
                     onChange={(e) => setSettings({...settings, contact_email: e.target.value})}
                     className="w-full px-4 py-2.5 rounded-lg border focus:outline-none"
-                    style={{ backgroundColor: '#0b1326', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                    style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
                   />
                 </div>
                 <div>
@@ -194,7 +197,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onBack }) => {
                     value={settings.contact_phone}
                     onChange={(e) => setSettings({...settings, contact_phone: e.target.value})}
                     className="w-full px-4 py-2.5 rounded-lg border focus:outline-none"
-                    style={{ backgroundColor: '#0b1326', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                    style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
                   />
                 </div>
                 <div>
@@ -203,7 +206,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onBack }) => {
                     value={settings.default_priority}
                     onChange={(e) => setSettings({...settings, default_priority: e.target.value as 'low' | 'medium' | 'high'})}
                     className="w-full px-4 py-2.5 rounded-lg border focus:outline-none"
-                    style={{ backgroundColor: '#0b1326', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                    style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
                   >
                     <option value="low" style={{ color: 'white' }}>Low</option>
                     <option value="medium" style={{ color: 'white' }}>Medium</option>
@@ -215,7 +218,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onBack }) => {
           )}
 
           {activeTab === 'notifications' && (
-            <div className="rounded-2xl p-6" style={{ backgroundColor: '#0d1a33' }}>
+            <div className="rounded-2xl p-6" style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}>
               <div className="space-y-4">
                 <div className="flex items-center justify-between p-4 rounded-lg" style={{ backgroundColor: '#0b1326' }}>
                   <div>
@@ -227,7 +230,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onBack }) => {
                     value={settings.notification_email}
                     onChange={(e) => setSettings({...settings, notification_email: e.target.value})}
                     className="px-4 py-2.5 rounded-lg border focus:outline-none w-64"
-                    style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                    style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
                   />
                 </div>
                 <div className="flex items-center justify-between p-4 rounded-lg" style={{ backgroundColor: '#0b1326' }}>
@@ -248,7 +251,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onBack }) => {
           )}
 
           {activeTab === 'categories' && (
-            <div className="rounded-2xl p-6" style={{ backgroundColor: '#0d1a33' }}>
+            <div className="rounded-2xl p-6" style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}>
               <div className="flex gap-2 mb-4">
                 <input
                   type="text"
@@ -256,7 +259,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onBack }) => {
                   onChange={(e) => setNewCategory(e.target.value)}
                   placeholder="Enter new category..."
                   className="flex-1 px-4 py-2.5 rounded-lg border focus:outline-none"
-                  style={{ backgroundColor: '#0b1326', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                  style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
                 />
                 <button
                   onClick={handleAddCategory}
@@ -268,7 +271,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onBack }) => {
               </div>
               <div className="space-y-2">
                 {settings.fault_categories.map((category) => (
-                  <div key={category} className="flex items-center justify-between p-3 rounded-lg" style={{ backgroundColor: '#0b1326' }}>
+                  <div key={category} className="flex items-center justify-between p-3 rounded-lg" style={{ backgroundColor: 'rgba(10,10,15,0.95)' }}>
                     <span className="text-sm text-white">{category}</span>
                     <button
                       onClick={() => handleRemoveCategory(category)}
@@ -283,7 +286,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onBack }) => {
           )}
 
           {activeTab === 'advanced' && (
-            <div className="rounded-2xl p-6" style={{ backgroundColor: '#0d1a33' }}>
+            <div className="rounded-2xl p-6" style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}>
               <div className="flex items-center justify-between p-4 rounded-lg" style={{ backgroundColor: '#0b1326' }}>
                 <div>
                   <p className="text-sm font-medium text-white">Maintenance Mode</p>
