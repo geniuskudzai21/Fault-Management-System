@@ -5,6 +5,7 @@ import TechnicianDashboard from './components/technician/TechnicianDashboard';
 import CustomerDashboard from './components/customer/CustomerDashboard';
 import FaultManagement from './components/admin/FaultManagement';
 import Reports from './components/admin/Reports';
+import GenerateReports from './components/admin/GenerateReports';
 import UserManagement from './components/admin/UserManagement';
 import LoadSheddingManagement from './components/admin/LoadSheddingManagement';
 import Settings from './components/admin/Settings';
@@ -211,12 +212,14 @@ const App: React.FC = () => {
             user={user}
             faults={faults}
             onBack={handleBackFromReports}
+            onGenerateReports={handleGenerateNewReport}
           />
         );
       case 'generate-reports':
         return (
           <GenerateReports 
             user={user}
+            faults={faults}
             onBack={handleBackFromReports}
           />
         );

@@ -8,12 +8,14 @@ interface ReportsProps {
   user: User;
   faults: Fault[];
   onBack: () => void;
+  onGenerateReports: () => void;
 }
 
 const Reports: React.FC<ReportsProps> = ({ 
   user, 
   faults,
-  onBack
+  onBack,
+  onGenerateReports
 }) => {
   const [loading, setLoading] = useState(false);
   const [dateRange, setDateRange] = useState({
@@ -161,6 +163,14 @@ const Reports: React.FC<ReportsProps> = ({
                 className="px-4 py-2.5 rounded-lg border focus:outline-none"
                 style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
               />
+              <button
+                onClick={onGenerateReports}
+                className="px-4 py-2.5 rounded-lg border flex items-center gap-2 transition-all hover:opacity-90"
+                style={{ backgroundColor: '#10b981', borderColor: 'rgba(0,51,160,0.2)', color: 'white' }}
+              >
+                <DocumentTextIcon className="w-4 h-4" />
+                Generate Reports
+              </button>
             </div>
           </div>
 

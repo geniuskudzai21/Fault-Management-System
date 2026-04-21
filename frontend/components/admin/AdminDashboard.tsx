@@ -213,6 +213,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <span>Reports</span>
             </button>
             <button
+              onClick={() => { onGenerateNewReport(); setMobileMenuOpen(false); }}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all cursor-pointer font-medium"
+              style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}
+            >
+              <DocumentTextIcon className="w-5 h-5" />
+              <span>Generate Reports</span>
+            </button>
+            <button
               onClick={() => { onSystemSettings(); setMobileMenuOpen(false); }}
               className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all cursor-pointer font-medium"
               style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}
