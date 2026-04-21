@@ -57,14 +57,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [usersRes, faultsRes, schedulesRes] = await Promise.allSettled([
+        const [usersRes, schedulesRes] = await Promise.allSettled([
           usersApi.getStats(),
-          faultsApi.getStats(),
           schedulesApi.getStats(),
         ]);
 
         const userStats = usersRes.status === 'fulfilled' ? usersRes.value.data : null;
-        const faultStats = faultsRes.status === 'fulfilled' ? faultsRes.value.data : null;
         const scheduleStats = schedulesRes.status === 'fulfilled' ? schedulesRes.value.data : null;
 
         const today = new Date().toDateString();
@@ -72,11 +70,11 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
         setStats({
           totalUsers: userStats?.total ?? 0,
-          totalFaults: faultStats?.total ?? 0,
-          resolvedFaults: faultStats?.resolved ?? 0,
+          totalFaults: faults?.length ?? 0,
+          resolvedFaults: faults?.filter((f: any) => f.status === 'Resolved').length ?? 0,
           activeLoadShedding: scheduleStats?.active ?? 0,
-          pendingFaults: faultStats?.reported ?? 0,
-          inProgressFaults: faultStats?.inProgress ?? 0,
+          pendingFaults: faults?.filter((f: any) => f.status === 'Reported').length ?? 0,
+          inProgressFaults: faults?.filter((f: any) => f.status === 'In Progress').length ?? 0,
           todayFaults,
         });
 
@@ -91,7 +89,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
       }
     };
     loadData();
-  }, []);
+  }, [faults]);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
@@ -397,7 +395,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     { name: 'Resolved', value: stats.resolvedFaults, percentage: Math.round((stats.resolvedFaults / Math.max(stats.totalFaults, 1)) * 100) },
                     { name: 'In Progress', value: stats.inProgressFaults, percentage: Math.round((stats.inProgressFaults / Math.max(stats.totalFaults, 1)) * 100) },
                     { name: 'Pending', value: stats.pendingFaults, percentage: Math.round((stats.pendingFaults / Math.max(stats.totalFaults, 1)) * 100) },
-                  ]}
+                  ].filter(item => item.value > 0)}
                   height={240}
                 />
               </div>
