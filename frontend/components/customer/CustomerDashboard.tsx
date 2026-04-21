@@ -74,7 +74,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
   };
 
   return (
-    <div className="flex" style={{ backgroundColor: '#0b1326', minHeight: '100vh' }}>
+    <div className="flex" style={{ backgroundColor: 'rgba(10,10,15,0.95)', minHeight: '100vh' }}>
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto">
         <div className="p-4 lg:p-8">
@@ -83,73 +83,73 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
           {/* Stats Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-8">
             <div 
-              className="p-6 rounded-2xl border"
-              style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(0,51,160,0.2)' }}
+              className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
+              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#dc2626' }}
             >
               <div className="flex items-center gap-4">
                 <div 
                   className="w-12 h-12 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: 'rgba(0,51,160,0.15)' }}
+                  style={{ backgroundColor: '#dc2626' }}
                 >
                   <ExclamationCircleIcon className="w-6 h-6" style={{ color: '#dc2626' }} />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-white">{stats.total}</p>
-                  <p className="text-sm" style={{ color: '#9ca3af' }}>Total Faults</p>
+                  <p className="text-sm font-small" style={{ color: '#9ca3af' }}>Total Faults</p>
                 </div>
               </div>
             </div>
 
             <div 
-              className="p-6 rounded-2xl border"
-              style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(0,51,160,0.2)' }}
+              className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
+              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#f59e0b' }}
             >
               <div className="flex items-center gap-4">
                 <div 
                   className="w-12 h-12 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: 'rgba(245,158,11,0.15)' }}
+                  style={{ backgroundColor: '#f59e0b' }}
                 >
                   <ClockIcon className="w-6 h-6" style={{ color: '#f59e0b' }} />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-white">{stats.reported}</p>
-                  <p className="text-sm" style={{ color: '#9ca3af' }}>Reported</p>
+                  <p className="text-sm font-small" style={{ color: '#9ca3af' }}>Reported</p>
                 </div>
               </div>
             </div>
 
             <div 
-              className="p-6 rounded-2xl border"
-              style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(0,51,160,0.2)' }}
+              className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
+              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#8b5cf6' }}
             >
               <div className="flex items-center gap-4">
                 <div 
                   className="w-12 h-12 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: 'rgba(139,92,246,0.15)' }}
+                  style={{ backgroundColor: '#8b5cf6' }}
                 >
                   <ClockIcon className="w-6 h-6" style={{ color: '#8b5cf6' }} />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-white">{stats.inProgress}</p>
-                  <p className="text-sm" style={{ color: '#9ca3af' }}>In Progress</p>
+                  <p className="text-sm font-small" style={{ color: '#9ca3af' }}>In Progress</p>
                 </div>
               </div>
             </div>
 
             <div 
-              className="p-6 rounded-2xl border"
-              style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(0,51,160,0.2)' }}
+              className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
+              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#10b981' }}
             >
               <div className="flex items-center gap-4">
                 <div 
                   className="w-12 h-12 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: 'rgba(16,185,129,0.15)' }}
+                  style={{ backgroundColor: '#10b981' }}
                 >
                   <CheckCircleIcon className="w-6 h-6" style={{ color: '#10b981' }} />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-white">{stats.resolved}</p>
-                  <p className="text-sm" style={{ color: '#9ca3af' }}>Resolved</p>
+                  <p className="text-sm font-small" style={{ color: '#9ca3af' }}>Resolved</p>
                 </div>
               </div>
             </div>
@@ -158,7 +158,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
           {/* Report Fault Section */}
           <div 
             className="rounded-2xl mt-8 overflow-hidden border"
-            style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(0,51,160,0.2)' }}
+            style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: 'rgba(0,51,160,0.2)' }}
           >
             <div className="px-6 py-5 border-b" style={{ borderColor: 'rgba(0,51,160,0.15)' }}>
               <h3 className="text-lg font-semibold text-white">Report a New Fault</h3>
@@ -176,7 +176,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
                       value={formData.address}
                       onChange={(e) => setFormData({...formData, address: e.target.value})}
                       className="w-full px-4 py-2.5 text-sm rounded-lg focus:outline-none"
-                      style={{ backgroundColor: '#0b1326', border: '1px solid rgba(0,51,160,0.3)', color: '#fff' }}
+                      style={{ backgroundColor: 'rgba(10,10,15,0.95)', border: '1px solid rgba(0,51,160,0.2)', color: '#fff' }}
                       placeholder="Enter fault location"
                     />
                   </div>
@@ -187,7 +187,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
                       value={formData.category}
                       onChange={(e) => setFormData({...formData, category: e.target.value})}
                       className="w-full px-4 py-2.5 text-sm rounded-lg focus:outline-none"
-                      style={{ backgroundColor: '#0b1326', border: '1px solid rgba(0,51,160,0.3)', color: '#fff' }}
+                      style={{ backgroundColor: 'rgba(10,10,15,0.95)', border: '1px solid rgba(0,51,160,0.2)', color: '#fff' }}
                     >
                       <option value="Power Outage">Power Outage</option>
                       <option value="Line Damage">Line Damage</option>
@@ -202,7 +202,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
                       value={formData.priority}
                       onChange={(e) => setFormData({...formData, priority: e.target.value})}
                       className="w-full px-4 py-2.5 text-sm rounded-lg focus:outline-none"
-                      style={{ backgroundColor: '#0b1326', border: '1px solid rgba(0,51,160,0.3)', color: '#fff' }}
+                      style={{ backgroundColor: 'rgba(10,10,15,0.95)', border: '1px solid rgba(0,51,160,0.2)', color: '#fff' }}
                     >
                       <option value="Low">Low</option>
                       <option value="Medium">Medium</option>
@@ -217,7 +217,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
                       value={formData.area}
                       onChange={(e) => setFormData({...formData, area: e.target.value})}
                       className="w-full px-4 py-2.5 text-sm rounded-lg focus:outline-none"
-                      style={{ backgroundColor: '#0b1326', border: '1px solid rgba(0,51,160,0.3)', color: '#fff' }}
+                      style={{ backgroundColor: 'rgba(10,10,15,0.95)', border: '1px solid rgba(0,51,160,0.2)', color: '#fff' }}
                     >
                       <option value="Avenues">Avenues</option>
                       <option value="Greenside">Greenside</option>
@@ -234,7 +234,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
                     value={formData.description}
                     onChange={(e) => setFormData({...formData, description: e.target.value})}
                     className="w-full px-4 py-2.5 text-sm rounded-lg focus:outline-none"
-                    style={{ backgroundColor: '#0b1326', border: '1px solid rgba(0,51,160,0.3)', color: '#fff' }}
+                    style={{ backgroundColor: 'rgba(10,10,15,0.95)', border: '1px solid rgba(0,51,160,0.2)', color: '#fff' }}
                     rows={3}
                     placeholder="Describe the fault in detail"
                   />
@@ -244,15 +244,15 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
                   <button 
                     type="submit" 
                     disabled={loading}
-                    className="px-4 py-2.5 rounded-lg text-white text-sm font-medium transition-all"
-                    style={{ backgroundColor: '#0033a0' }}
+                    className="px-4 py-2.5 rounded-lg text-white text-sm font-medium transition-all hover:opacity-90"
+                    style={{ backgroundColor: '#0033a0', color: '#fed000' }}
                   >
                     {loading ? 'Submitting...' : 'Submit Fault Report'}
                   </button>
                   <button 
                     type="button"
                     onClick={() => setShowReportForm(false)}
-                    className="px-4 py-2.5 rounded-lg text-white text-sm font-medium transition-all"
+                    className="px-4 py-2.5 rounded-lg text-white text-sm font-medium transition-all hover:bg-white/10"
                     style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
                   >
                     Cancel
@@ -264,8 +264,8 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
             <div className="text-center py-8">
               <button 
                 onClick={() => setShowReportForm(true)}
-                className="px-6 py-3 rounded-lg text-white font-medium transition-all"
-                style={{ backgroundColor: '#0033a0' }}
+                className="px-6 py-3 rounded-lg text-white font-medium transition-all hover:opacity-90"
+                style={{ backgroundColor: '#0033a0', color: '#fed000' }}
               >
                 Report New Fault
               </button>
@@ -279,7 +279,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
           {/* My Faults Table */}
           <div 
             className="rounded-2xl mt-8 overflow-hidden border"
-            style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(0,51,160,0.2)' }}
+            style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: 'rgba(0,51,160,0.2)' }}
           >
             <div className="px-6 py-5 border-b" style={{ borderColor: 'rgba(0,51,160,0.15)' }}>
               <h3 className="text-lg font-semibold text-white">My Fault Reports</h3>

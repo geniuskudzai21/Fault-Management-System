@@ -72,7 +72,7 @@ const TechnicianDashboard: React.FC<TechnicianDashboardProps> = ({
   };
 
   return (
-    <div className="flex" style={{ backgroundColor: '#0b1326', minHeight: '100vh' }}>
+    <div className="flex" style={{ backgroundColor: 'rgba(10,10,15,0.95)', minHeight: '100vh' }}>
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto">
         <div className="p-4 lg:p-8">
@@ -81,73 +81,73 @@ const TechnicianDashboard: React.FC<TechnicianDashboardProps> = ({
           {/* Stats Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-8">
             <div 
-              className="p-6 rounded-2xl border"
-              style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(0,51,160,0.2)' }}
+              className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
+              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#dc2626' }}
             >
               <div className="flex items-center gap-4">
                 <div 
                   className="w-12 h-12 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: 'rgba(0,51,160,0.15)' }}
+                  style={{ backgroundColor: '#dc2626' }}
                 >
                   <ExclamationCircleIcon className="w-6 h-6" style={{ color: '#dc2626' }} />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-white">{stats.total}</p>
-                  <p className="text-sm" style={{ color: '#9ca3af' }}>Total Faults</p>
+                  <p className="text-sm font-small" style={{ color: '#9ca3af' }}>Total Faults</p>
                 </div>
               </div>
             </div>
 
             <div 
-              className="p-6 rounded-2xl border"
-              style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(0,51,160,0.2)' }}
+              className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
+              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#f59e0b' }}
             >
               <div className="flex items-center gap-4">
                 <div 
                   className="w-12 h-12 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: 'rgba(245,158,11,0.15)' }}
+                  style={{ backgroundColor: '#f59e0b' }}
                 >
                   <ClockIcon className="w-6 h-6" style={{ color: '#f59e0b' }} />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-white">{stats.reported}</p>
-                  <p className="text-sm" style={{ color: '#9ca3af' }}>Reported</p>
+                  <p className="text-sm font-small" style={{ color: '#9ca3af' }}>Reported</p>
                 </div>
               </div>
             </div>
 
             <div 
-              className="p-6 rounded-2xl border"
-              style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(0,51,160,0.2)' }}
+              className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
+              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#8b5cf6' }}
             >
               <div className="flex items-center gap-4">
                 <div 
                   className="w-12 h-12 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: 'rgba(139,92,246,0.15)' }}
+                  style={{ backgroundColor: '#8b5cf6' }}
                 >
                   <WrenchIcon className="w-6 h-6" style={{ color: '#8b5cf6' }} />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-white">{stats.inProgress}</p>
-                  <p className="text-sm" style={{ color: '#9ca3af' }}>In Progress</p>
+                  <p className="text-sm font-small" style={{ color: '#9ca3af' }}>In Progress</p>
                 </div>
               </div>
             </div>
 
             <div 
-              className="p-6 rounded-2xl border"
-              style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(0,51,160,0.2)' }}
+              className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
+              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#10b981' }}
             >
               <div className="flex items-center gap-4">
                 <div 
                   className="w-12 h-12 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: 'rgba(16,185,129,0.15)' }}
+                  style={{ backgroundColor: '#10b981' }}
                 >
                   <CheckCircleIcon className="w-6 h-6" style={{ color: '#10b981' }} />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-white">{stats.resolved}</p>
-                  <p className="text-sm" style={{ color: '#9ca3af' }}>Resolved</p>
+                  <p className="text-sm font-small" style={{ color: '#9ca3af' }}>Resolved</p>
                 </div>
               </div>
             </div>
@@ -156,14 +156,14 @@ const TechnicianDashboard: React.FC<TechnicianDashboardProps> = ({
           {/* Filters */}
           <div 
             className="rounded-2xl p-4 mt-8"
-            style={{ backgroundColor: '#0d1a33' }}
+            style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}
           >
             <div className="flex flex-col lg:flex-row gap-4">
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
                 className="px-4 py-2.5 rounded-lg border focus:outline-none"
-                style={{ backgroundColor: '#0b1326', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
               >
                 <option value="all" style={{ color: 'white' }}>All Status</option>
                 <option value="Reported" style={{ color: 'white' }}>Reported</option>
@@ -174,7 +174,7 @@ const TechnicianDashboard: React.FC<TechnicianDashboardProps> = ({
                 value={filterPriority}
                 onChange={(e) => setFilterPriority(e.target.value)}
                 className="px-4 py-2.5 rounded-lg border focus:outline-none"
-                style={{ backgroundColor: '#0b1326', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
               >
                 <option value="all" style={{ color: 'white' }}>All Priority</option>
                 <option value="High" style={{ color: 'white' }}>High</option>
@@ -187,7 +187,7 @@ const TechnicianDashboard: React.FC<TechnicianDashboardProps> = ({
           {/* Faults Table */}
           <div 
             className="rounded-2xl mt-8 overflow-hidden border"
-            style={{ backgroundColor: '#0d1a33', borderColor: 'rgba(0,51,160,0.2)' }}
+            style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: 'rgba(0,51,160,0.2)' }}
           >
             <div className="px-6 py-5 border-b" style={{ borderColor: 'rgba(0,51,160,0.15)' }}>
               <h3 className="text-lg font-semibold text-white">My Assigned Faults</h3>
