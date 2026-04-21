@@ -21,8 +21,8 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ user, onLogout, onNotificatio
         </div>
       </div>
 
-      <div className="flex-1 max-w-md mx-8">
-  
+<div className="flex-1 max-w-md mx-8 flex items-center justify-center">
+        
       </div>
 
       <div className="flex items-center gap-4">

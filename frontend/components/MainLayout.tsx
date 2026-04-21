@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { User } from '../types';
 import { UserRole } from '../constants';
 import { MenuIcon, XMarkIcon, HomeIcon, DocumentTextIcon, ArrowRightOnRectangleIcon, LogoutIcon } from './icons';
-import { AdminHeader, TechnicianHeader, CustomerHeader, ApplicantHeader, InspectorHeader, HealthHeader, EngineeringHeader } from './headers';
+import { AdminHeader, TechnicianHeader, CustomerHeader } from './headers';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -26,14 +26,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, user, onLogout, onSet
         return <TechnicianHeader user={user} onLogout={onLogout} onNotifications={onNotifications} />;
       case UserRole.Customer:
         return <CustomerHeader user={user} onLogout={onLogout} onNotifications={onNotifications} />;
-      case 'Applicant':
-        return <ApplicantHeader user={user} onLogout={onLogout} onNotifications={onNotifications} />;
-      case 'Inspector':
-        return <InspectorHeader user={user} onLogout={onLogout} onNotifications={onNotifications} />;
-      case 'Health':
-        return <HealthHeader user={user} onLogout={onLogout} onNotifications={onNotifications} />;
-      case 'Engineering':
-        return <EngineeringHeader user={user} onLogout={onLogout} onNotifications={onNotifications} />;
       default:
         return <AdminHeader user={user} onLogout={onLogout} onNotifications={onNotifications} />;
     }
@@ -47,14 +39,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, user, onLogout, onSet
         return 'blue';
       case UserRole.Customer:
         return 'green';
-      case 'Applicant':
-        return 'violet';
-      case 'Inspector':
-        return 'amber';
-      case 'Health':
-        return 'red';
-      case 'Engineering':
-        return 'cyan';
       default:
         return 'purple';
     }

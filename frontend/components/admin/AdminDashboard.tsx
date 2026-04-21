@@ -170,10 +170,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="h-20 flex items-center px-6 border-b" style={{ borderColor: 'rgba(0,51,160,0.15)' }}>
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#fed000' }}>
-              <img src="/images.jpg" alt="ZESA" className="w-full h-full object-cover" />
-            </div>
-            <span className="ml-3 text-lg font-bold text-white tracking-wide">ZESA</span>
           </div>
 
           {/* Navigation */}

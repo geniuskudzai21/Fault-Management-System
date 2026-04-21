@@ -18,6 +18,7 @@ const UserManagement: React.FC<UserManagementProps> = ({ user, onBack }) => {
   const [newUser, setNewUser] = useState({
     name: '',
     email: '',
+    password: '',
     role: 'Customer',
     area: 'Avenues'
   });
@@ -50,13 +51,18 @@ const UserManagement: React.FC<UserManagementProps> = ({ user, onBack }) => {
   const handleAddUser = async () => {
     try {
       const response = await usersApi.create(newUser);
-      if (response.data) {
-        setUsers([...users, response.data]);
-        setNewUser({ name: '', email: '', role: 'Customer', area: 'Avenues' });
+      if (response.success) {
+        // Fetch updated user list
+        const usersResponse = await usersApi.getAll();
+        if (usersResponse.data) {
+          setUsers(usersResponse.data);
+        }
+        setNewUser({ name: '', email: '', password: '', role: 'Customer', area: 'Avenues' });
         setShowAddUser(false);
       }
     } catch (error: any) {
       console.error('Failed to add user:', error);
+      alert(error.message || 'Failed to add user');
     }
   };
 
@@ -399,6 +405,17 @@ const UserManagement: React.FC<UserManagementProps> = ({ user, onBack }) => {
                     onChange={(e) => setNewUser({...newUser, email: e.target.value})}
                     className="w-full px-4 py-2.5 rounded-lg border focus:outline-none"
                     style={{ backgroundColor: '#0b1326', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2" style={{ color: '#9ca3af' }}>Password</label>
+                  <input
+                    type="password"
+                    value={newUser.password}
+                    onChange={(e) => setNewUser({...newUser, password: e.target.value})}
+                    className="w-full px-4 py-2.5 rounded-lg border focus:outline-none"
+                    style={{ backgroundColor: '#0b1326', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                    placeholder="Default: password123"
                   />
                 </div>
                 <div>

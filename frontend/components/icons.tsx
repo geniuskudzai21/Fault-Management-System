@@ -119,9 +119,15 @@ export const CalendarIcon: React.FC<{ className?: string }> = ({ className }) =>
 );
 
 export const CheckCircleIcon: React.FC<{ className?: string }> = ({ className }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
+  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+);
+
+export const WrenchIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5a3 3 0 116 0 3 3 0 01-6 0zM8.05 17.5a2 2 0 104 0M15 10.5a3 3 0 116 0 3 3 0 01-6 0zM3.53 14.45c.48.28 1.12.28 1.6-.05a2.1 2.1 0 002.87-2.5 2.1 2.1 0 00-2.87-2.5c-.48-.33-1.12-.33-1.6.05a2.1 2.1 0 00-1.4 1.8 2.1 2.1 0 001.4 2.7z" />
+  </svg>
 );
 
 export const ClipboardDocumentCheckIcon: React.FC<{ className?: string }> = ({ className }) => (
