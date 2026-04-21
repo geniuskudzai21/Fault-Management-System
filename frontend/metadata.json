@@ -1,0 +1,8 @@
+
+{
+  "name": "Mutare City Council Unified Licensing App",
+  "description": "A secure, unified mobile application to digitalize licensing workflows, progress tracking, and condition reporting for the Mutare City Council's Health and Engineering Departments.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
