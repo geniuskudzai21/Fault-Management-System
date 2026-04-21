@@ -89,11 +89,12 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onRegister }) => {
       <div className="absolute top-0 right-1/4 w-64 h-64 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,150,255,0.15) 0%, transparent 70%)' }} />
       <div className="absolute bottom-0 left-1/4 w-64 h-64 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,100,255,0.15) 0%, transparent 70%)' }} />
       
-      <div className="w-full max-w-sm p-6 relative z-10" style={{ 
+      <div className="w-full p-6 relative z-10" style={{ 
         backgroundColor: 'rgba(10,10,15,0.95)', 
         borderRadius: '0.5rem', 
         border: '1px solid rgba(0,150,255,0.4)',
-        boxShadow: '0 0 20px rgba(0,150,255,0.2), inset 0 0 20px rgba(0,150,255,0.05)'
+        boxShadow: '0 0 20px rgba(0,150,255,0.2), inset 0 0 20px rgba(0,150,255,0.05)',
+        maxWidth: '370px'
       }}>
         {/* Top neon line */}
         <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, #0096ff, transparent)' }} />
@@ -166,7 +167,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onRegister }) => {
           </Button>
 
           <div className="text-center pt-2">
-            <button onClick={() => setIsLogin(true)} className="text-xs font-mono transition-colors hover:underline" style={{ color: '#0096ff' }}>
+            <button onClick={() => setIsLogin(true)} className="text-xs font-mono transition-colors hover:underline" style={{ color: 'oklch(90.5% 0.182 98.111)' }}>
               // LOGIN
             </button>
           </div>
@@ -191,11 +192,12 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onRegister }) => {
       <div className="absolute top-0 left-1/4 w-64 h-64 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,150,255,0.15) 0%, transparent 70%)' }} />
       <div className="absolute bottom-0 right-1/4 w-64 h-64 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,100,255,0.15) 0%, transparent 70%)' }} />
       
-      <div className="w-full max-w-sm p-6 relative z-10" style={{ 
+      <div className="w-full p-6 relative z-10" style={{ 
         backgroundColor: 'rgba(10,10,15,0.95)', 
         borderRadius: '0.5rem', 
         border: '1px solid rgba(0,150,255,0.4)',
-        boxShadow: '0 0 20px rgba(0,150,255,0.2), inset 0 0 20px rgba(0,150,255,0.05)'
+        boxShadow: '0 0 20px rgba(0,150,255,0.2), inset 0 0 20px rgba(0,150,255,0.05)',
+        maxWidth: '370px'
       }}>
         {/* Top neon line */}
         <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, #0096ff, transparent)' }} />
@@ -242,7 +244,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onRegister }) => {
           <div className="flex items-center justify-between">
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" className="w-4 h-4 rounded" style={{ accentColor: '#0096ff' }} />
-              <span className="text-xs font-mono" style={{ color: '#0096ff', opacity: 0.7 }}>REMEMBER ME</span>
+              <span className="text-xs font-mono" style={{ color: '#0096ff' }}>REMEMBER ME</span>
             </label>
             <button className="text-xs font-mono transition-colors hover:underline" style={{ color: '#0096ff' }}>
              Forgot Password?
@@ -254,7 +256,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onRegister }) => {
           </Button>
 
           <div className="text-center pt-2">
-            <button onClick={() => setIsLogin(false)} className="text-xs font-mono transition-colors hover:underline" style={{ color: '#ff0000' }}>
+            <button onClick={() => setIsLogin(false)} className="text-xs font-mono transition-colors hover:underline" style={{ color: 'oklch(90.5% 0.182 98.111)' }}>
               // CREATE NEW ACCOUNT
             </button>
           </div>
