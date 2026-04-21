@@ -1,8 +1,9 @@
-import React, { useState, useMemo } from 'react';
-import { User, Fault } from '../../types';
+import React, { useState, useMemo, useEffect } from 'react';
+import { User, Fault, Notification } from '../../types';
 import { FaultStatus } from '../../constants';
 import { faultsApi } from '../../src/api';
 import { ExclamationCircleIcon, ClockIcon, CheckCircleIcon } from '../icons';
+import NotificationsPanel from '../common/NotificationsPanel';
 
 interface CustomerDashboardProps {
   user: User;
@@ -17,6 +18,8 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
 }) => {
   const [showReportForm, setShowReportForm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [formData, setFormData] = useState({
     address: '',
     category: 'Power Outage',
@@ -73,6 +76,209 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
     });
   };
 
+  // Comprehensive notifications effect
+  useEffect(() => {
+    const generateNotifications = async () => {
+      try {
+        const newNotifications: Notification[] = [];
+
+        // 1. Load Shedding Notifications
+        const mockLoadSheddingData = [
+          {
+            id: '1',
+            area: user.area || 'Avenues',
+            startTime: '14:00',
+            endTime: '16:00',
+            date: new Date().toISOString().split('T')[0],
+            status: 'active',
+            reason: 'Maintenance work'
+          },
+          {
+            id: '2', 
+            area: 'Avenues',
+            startTime: '18:00',
+            endTime: '20:00',
+            date: new Date().toISOString().split('T')[0],
+            status: 'scheduled',
+            reason: 'Planned outage'
+          },
+          {
+            id: '3',
+            area: 'Sakubva',
+            startTime: '10:00',
+            endTime: '12:00',
+            date: new Date().toISOString().split('T')[0],
+            status: 'active',
+            reason: 'Emergency repairs'
+          }
+        ];
+
+        // Generate load shedding notifications
+        mockLoadSheddingData.forEach(schedule => {
+          const scheduleTime = new Date(`${schedule.date} ${schedule.startTime}`);
+          const endTime = new Date(`${schedule.date} ${schedule.endTime}`);
+          const now = new Date();
+
+          if (schedule.area === user.area) {
+            if (schedule.status === 'active' || (scheduleTime <= now && endTime >= now)) {
+              newNotifications.push({
+                id: `load-shedding-${schedule.id}-${Date.now()}`,
+                userId: user.id,
+                type: 'load_shedding',
+                title: schedule.status === 'active' ? 'Load Shedding Active' : 'Scheduled Load Shedding',
+                message: `${schedule.status === 'active' ? 'Load shedding is currently active' : 'Scheduled load shedding'} in ${schedule.area} from ${schedule.startTime} to ${schedule.endTime}. Reason: ${schedule.reason}`,
+                timestamp: new Date().toISOString(),
+                isRead: false
+              });
+            }
+          }
+        });
+
+        // 2. Fault Status Notifications
+        myFaults.forEach(fault => {
+          if (fault.status === FaultStatus.InProgress && !notifications.some(n => n.message.includes(fault.id))) {
+            newNotifications.push({
+              id: `fault-inprogress-${fault.id}-${Date.now()}`,
+              userId: user.id,
+              type: 'fault_assigned',
+              title: 'Fault In Progress',
+              message: `Your fault #${fault.faultNumber || fault.id} in ${fault.area} is now being worked on by a technician.`,
+              timestamp: new Date().toISOString(),
+              isRead: false
+            });
+          } else if (fault.status === FaultStatus.Resolved && !notifications.some(n => n.message.includes(fault.id) && n.type === 'fault_resolved')) {
+            newNotifications.push({
+              id: `fault-resolved-${fault.id}-${Date.now()}`,
+              userId: user.id,
+              type: 'fault_resolved',
+              title: 'Fault Resolved',
+              message: `Great news! Your fault #${fault.faultNumber || fault.id} in ${fault.area} has been resolved.`,
+              timestamp: new Date().toISOString(),
+              isRead: false
+            });
+          }
+        });
+
+        // 3. Power Restoration Notifications
+        const mockPowerRestorationData = [
+          {
+            id: '1',
+            area: 'Avenues',
+            restorationTime: '16:30',
+            date: new Date().toISOString().split('T')[0],
+            status: 'completed',
+            affectedCustomers: 1500
+          }
+        ];
+
+        mockPowerRestorationData.forEach(restoration => {
+          if (restoration.area === user.area && restoration.status === 'completed') {
+            newNotifications.push({
+              id: `power-restored-${restoration.id}-${Date.now()}`,
+              userId: user.id,
+              type: 'power_restored',
+              title: 'Power Restored',
+              message: `Power has been restored in ${restoration.area}. Service to ${restoration.affectedCustomers} customers has been resumed.`,
+              timestamp: new Date().toISOString(),
+              isRead: false
+            });
+          }
+        });
+
+        // 4. System Maintenance Notifications
+        const mockMaintenanceData = [
+          {
+            id: '1',
+            title: 'Scheduled System Maintenance',
+            message: 'System maintenance scheduled for tonight 11PM - 2AM. Services may be temporarily unavailable.',
+            date: new Date().toISOString().split('T')[0],
+            time: '23:00',
+            affectedAreas: ['Avenues', 'Sakubva']
+          },
+          {
+            id: '2',
+            title: 'Payment System Update',
+            message: 'Payment system will be updated tomorrow morning 9AM-11AM. Online payments may be temporarily unavailable.',
+            date: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+            time: '09:00'
+          }
+        ];
+
+        mockMaintenanceData.forEach(maintenance => {
+          if (maintenance.affectedAreas.includes(user.area || 'Avenues')) {
+            newNotifications.push({
+              id: `maintenance-${maintenance.id}-${Date.now()}`,
+              userId: user.id,
+              type: 'new_fault',
+              title: maintenance.title,
+              message: maintenance.message,
+              timestamp: new Date(`${maintenance.date} ${maintenance.time}`).toISOString(),
+              isRead: false
+            });
+          }
+        });
+
+        // Add notifications if any exist
+        if (newNotifications.length > 0) {
+          setNotifications(prev => [...newNotifications, ...prev]
+            .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+            .slice(0, 50)); // Keep only last 50 notifications, sorted by newest first
+        }
+      } catch (error) {
+        console.error('Failed to generate notifications:', error);
+      }
+    };
+
+    // Generate notifications immediately and then every 2 minutes
+    generateNotifications();
+    const interval = setInterval(generateNotifications, 2 * 60 * 1000); // Check every 2 minutes
+
+    return () => clearInterval(interval);
+  }, [user.area, user.id, myFaults, notifications]);
+
+  // Also generate notifications when faults change
+  useEffect(() => {
+    const generateFaultNotifications = () => {
+      const newNotifications: Notification[] = [];
+      
+      myFaults.forEach(fault => {
+        if (fault.status === FaultStatus.Reported && !notifications.some(n => n.message.includes(fault.id))) {
+          newNotifications.push({
+            id: `fault-reported-${fault.id}-${Date.now()}`,
+            userId: user.id,
+            type: 'new_fault',
+            title: 'Fault Reported',
+            message: `Your fault #${fault.faultNumber || fault.id} has been successfully reported and is being reviewed.`,
+            timestamp: new Date().toISOString(),
+            isRead: false
+          });
+        }
+      });
+
+      if (newNotifications.length > 0) {
+        setNotifications(prev => [...newNotifications, ...prev]
+          .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+          .slice(0, 50));
+      }
+    };
+
+    generateFaultNotifications();
+  }, [myFaults, notifications]);
+
+  const handleMarkNotificationRead = (id: string) => {
+    setNotifications(prev => 
+      prev.map(n => n.id === id ? { ...n, isRead: true } : n)
+    );
+  };
+
+  const handleClearAllNotifications = () => {
+    setNotifications([]);
+  };
+
+  const handleCloseNotifications = () => {
+    setShowNotifications(false);
+  };
+
   return (
     <div className="flex" style={{ backgroundColor: 'rgba(10,10,15,0.95)', minHeight: '100vh' }}>
       {/* Main Content */}
@@ -81,7 +287,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
           <h1 className="text-2xl lg:text-3xl font-bold text-white">Customer Dashboard</h1>
           
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
             <div 
               className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
               style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#dc2626' }}
@@ -96,24 +302,6 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
                 <div>
                   <p className="text-2xl font-bold text-white">{stats.total}</p>
                   <p className="text-sm font-small" style={{ color: '#9ca3af' }}>Total Faults</p>
-                </div>
-              </div>
-            </div>
-
-            <div 
-              className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
-              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#f59e0b' }}
-            >
-              <div className="flex items-center gap-4">
-                <div 
-                  className="w-12 h-12 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: '#f59e0b' }}
-                >
-                  <ClockIcon className="w-6 h-6" style={{ color: '#f59e0b' }} />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-white">{stats.reported}</p>
-                  <p className="text-sm font-small" style={{ color: '#9ca3af' }}>Reported</p>
                 </div>
               </div>
             </div>
@@ -356,6 +544,16 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Notifications Panel */}
+      {showNotifications && (
+        <NotificationsPanel
+          notifications={notifications}
+          onClose={handleCloseNotifications}
+          onMarkRead={handleMarkNotificationRead}
+          onClearAll={handleClearAllNotifications}
+        />
+      )}
     </div>
   );
 };

@@ -163,7 +163,7 @@ const FaultManagement: React.FC<FaultManagementProps> = ({
             <h1 className="text-2xl lg:text-3xl font-bold text-white">Fault Management</h1>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
             <div 
               className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
               style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#dc2626' }}
@@ -178,24 +178,6 @@ const FaultManagement: React.FC<FaultManagementProps> = ({
                 <div>
                   <p className="text-2xl font-bold text-white">{stats.total}</p>
                   <p className="text-sm font-small" style={{ color: '#9ca3af' }}>Total Faults</p>
-                </div>
-              </div>
-            </div>
-
-            <div 
-              className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border"
-              style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#3b82f6' }}
-            >
-              <div className="flex items-center gap-4">
-                <div 
-                  className="w-12 h-12 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: '#3b82f6' }}
-                >
-                  <ClockIcon className="w-6 h-6" style={{ color: '#3b82f6' }} />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-white">{stats.reported}</p>
-                  <p className="text-sm font-small" style={{ color: '#9ca3af' }}>Reported</p>
                 </div>
               </div>
             </div>
