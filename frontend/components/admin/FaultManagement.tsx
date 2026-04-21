@@ -336,48 +336,32 @@ const FaultManagement: React.FC<FaultManagementProps> = ({
                         <span className="text-sm" style={{ color: '#9ca3af' }}>{formatDate(fault.reportedDate)}</span>
                       </td>
                       <td className="px-6 py-4">
-                        {fault.status === FaultStatus.Reported && (
-                          <div className="flex items-center gap-2">
-                            <select
-                              onChange={(e) => {
-                                if (e.target.value) {
-                                  assignFault(fault.id, e.target.value);
-                                }
-                              }}
-                              className="px-2 py-1.5 rounded-lg border text-xs"
-                              style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white' }}
-                              disabled={updatingFault === fault.id}
-                            >
-                              <option value="">Assign Tech</option>
-                              {technicians.map((tech) => (
-                                <option key={tech.id} value={tech.id}>
-                                  {tech.name}
-                                </option>
-                              ))}
-                            </select>
-                            <button
-                              onClick={() => updateFaultStatus(fault.id, FaultStatus.InProgress)}
-                              className="px-3 py-1.5 text-xs rounded-lg transition-all hover:opacity-90"
-                              style={{ backgroundColor: '#3b82f6', color: 'white' }}
-                              disabled={updatingFault === fault.id}
-                            >
-                              Start
-                            </button>
-                          </div>
-                        )}
-                        {fault.status === FaultStatus.InProgress && (
-                          <button
-                            onClick={() => updateFaultStatus(fault.id, FaultStatus.Resolved)}
-                            className="px-3 py-1.5 text-xs rounded-lg transition-all hover:opacity-90"
-                            style={{ backgroundColor: '#10b981', color: 'white' }}
+                        <div className="flex items-center gap-2">
+                          <select
+                            onChange={(e) => {
+                              if (e.target.value) {
+                                assignFault(fault.id, e.target.value);
+                              }
+                            }}
+                            className="px-2 py-1.5 rounded-lg border text-xs"
+                            style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white' }}
                             disabled={updatingFault === fault.id}
                           >
-                            {updatingFault === fault.id ? 'Updating...' : 'Resolve'}
-                          </button>
-                        )}
-                        {fault.status === FaultStatus.Resolved && (
-                          <span className="text-xs" style={{ color: '#10b981' }}>Completed</span>
-                        )}
+                            <option value="">
+                              {fault.technicianId ? 'Reassign' : 'Assign Tech'}
+                            </option>
+                            {technicians.map((tech) => (
+                              <option key={tech.id} value={tech.id}>
+                                {tech.name}
+                              </option>
+                            ))}
+                          </select>
+                          {fault.technicianId && (
+                            <span className="px-2 py-1 text-xs font-medium rounded-lg inline-flex" style={{ backgroundColor: 'rgba(16,185,129,0.15)', color: '#10b981' }}>
+                              Assigned
+                            </span>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}

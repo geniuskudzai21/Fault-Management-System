@@ -21,14 +21,11 @@ const TechnicianDashboard: React.FC<TechnicianDashboardProps> = ({
   const [filterPriority, setFilterPriority] = useState<string>('all');
 
   const myFaults = useMemo(() => {
-    // Show all pending/reported faults (no filter by technician)
+    // Show only faults assigned to this technician
     return faults.filter(fault => 
-      fault.status === FaultStatus.Reported || 
-      fault.status === FaultStatus.InProgress ||
-      fault.status === 'Reported' ||
-      fault.status === 'In Progress'
+      String(fault.technicianId) === String(user.id)
     );
-  }, [faults]);
+  }, [faults, user.id]);
 
   const filteredFaults = useMemo(() => {
     return myFaults.filter(fault => {
@@ -291,7 +288,7 @@ const TechnicianDashboard: React.FC<TechnicianDashboardProps> = ({
             {filteredFaults.length === 0 && (
               <div className="text-center py-8" style={{ color: '#9ca3af' }}>
                 <p className="text-sm">No faults assigned to you</p>
-                <p className="text-xs mt-1" style={{ color: '#6b7280' }}>Total available: {myFaults.length} unrepaired</p>
+                <p className="text-xs mt-1">Check back later for new assignments</p>
               </div>
             )}
           </div>
