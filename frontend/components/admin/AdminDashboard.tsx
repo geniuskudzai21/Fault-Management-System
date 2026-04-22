@@ -165,8 +165,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
         style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}
       >
         <div className="flex flex-col h-full">
-          {/* Separator Line */}
-          <div className="h-0.5" style={{ backgroundColor: '#10b981' }}></div>
           {/* Logo */}
           <div className="h-20 flex items-center px-6 border-b" style={{ borderColor: 'rgba(113, 145, 216, 1) 0.15)' }}>
           </div>

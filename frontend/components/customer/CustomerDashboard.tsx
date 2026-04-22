@@ -81,8 +81,6 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
 
   const generateNotifications = async () => {
     try {
-      const currentNotifications = notificationsRef.current;
-      const existingIds = new Set(currentNotifications.map(n => n.id));
       const newNotifications: Notification[] = [];
 
       // 1. Load Shedding Notifications
@@ -91,9 +89,8 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
         const loadSheddingSchedules = schedulesResponse.data || [];
 
         loadSheddingSchedules.forEach(schedule => {
-          const notificationId = `load-shedding-${schedule.id}`;
           // Skip if already exists
-          if (existingIds.has(notificationId)) return;
+          if (notificationsRef.current.some(n => n.id.startsWith(`load-shedding-${schedule.id}`))) return;
           
           const userAreaLower = (user.area || '').toLowerCase();
           const scheduleAreaLower = (schedule.area || '').toLowerCase();
@@ -101,7 +98,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
           
           if (areaMatches) {
             newNotifications.push({
-              id: notificationId,
+              id: `load-shedding-${schedule.id}`,
               userId: user.id,
               type: 'load_shedding',
               title: 'Load Shedding',
@@ -117,12 +114,9 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
 
       // 2. Fault Status Notifications
       myFaults.forEach(fault => {
-        const inProgressId = `fault-inprogress-${fault.id}`;
-        const resolvedId = `fault-resolved-${fault.id}`;
-        
-        if (fault.status === FaultStatus.InProgress && !existingIds.has(inProgressId)) {
+        if (fault.status === FaultStatus.InProgress && !notificationsRef.current.some(n => n.id.includes(fault.id) && n.type === 'fault_assigned')) {
           newNotifications.push({
-            id: inProgressId,
+            id: `fault-inprogress-${fault.id}`,
             userId: user.id,
             type: 'fault_assigned',
             title: 'Fault In Progress',
@@ -130,15 +124,15 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
             timestamp: new Date().toISOString(),
             isRead: false
           });
-        } else if (fault.status === FaultStatus.Resolved && !existingIds.has(resolvedId)) {
+        } else if (fault.status === FaultStatus.Resolved && !notificationsRef.current.some(n => n.id.includes(fault.id) && n.type === 'fault_resolved')) {
           newNotifications.push({
-            id: resolvedId,
+            id: `fault-resolved-${fault.id}`,
             userId: user.id,
             type: 'fault_resolved',
             title: 'Fault Resolved',
             message: `Great news! Your fault #${fault.faultNumber || fault.id} in ${fault.area} has been resolved.`,
             timestamp: new Date().toISOString(),
-              isRead: false
+            isRead: false
           });
         }
       });
@@ -151,16 +145,9 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
 
       // Only add new notifications, don't duplicate
       if (newNotifications.length > 0) {
-        setNotifications(prev => {
-          const allNotifications = [...newNotifications, ...prev];
-          // Remove any duplicates by ID and sort by timestamp
-          const uniqueNotifications = allNotifications.filter((notification, index, arr) => 
-            arr.findIndex(n => n.id === notification.id) === index
-          );
-          return uniqueNotifications
-            .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-            .slice(0, 50);
-        });
+        setNotifications(prev => [...newNotifications, ...prev]
+          .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+          .slice(0, 50));
       }
     } catch (error) {
       console.error('Failed to generate notifications:', error);
@@ -169,20 +156,11 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
 
   useEffect(() => {
     generateNotifications();
-  }, [user.area, user.id, myFaults.length]);
+  }, [user.area, user.id]);
 
   useEffect(() => {
     if (showNotifications) {
-      // Only refresh notifications when opening panel, not on every show
-      const hasNewFaults = myFaults.some(fault => {
-        const inProgressId = `fault-inprogress-${fault.id}`;
-        const resolvedId = `fault-resolved-${fault.id}`;
-        return !notificationsRef.current.some(n => n.id === inProgressId || n.id === resolvedId);
-      });
-      
-      if (hasNewFaults) {
-        generateNotifications();
-      }
+      generateNotifications();
     }
   }, [showNotifications]);
 
