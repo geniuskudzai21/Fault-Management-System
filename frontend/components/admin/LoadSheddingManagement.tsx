@@ -118,7 +118,10 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
 
   if (loading) {
     return (
-      <div className="flex" style={{ backgroundColor: 'rgba(10,10,15,0.95)', minHeight: '100vh' }}>
+      <div className="flex" style={{ 
+        background: 'linear-gradient(135deg, #0a0a0f 0%, #1a1f3a 25%, #0f172a 50%, #1e293b 75%, #0a0a0f 100%)',
+        minHeight: '100vh' 
+      }}>
         <div className="flex-1 flex items-center justify-center">
           <div className="w-12 h-12 border-2 border-yellow-400/30 border-t-yellow-400 rounded-full animate-spin"></div>
         </div>
@@ -127,7 +130,10 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
   }
 
   return (
-    <div className="flex" style={{ backgroundColor: 'rgba(10,10,15,0.95)', minHeight: '100vh' }}>
+    <div className="flex" style={{ 
+      background: 'linear-gradient(135deg, #0a0a0f 0%, #1a1f3a 25%, #0f172a 50%, #1e293b 75%, #0a0a0f 100%)',
+      minHeight: '100vh' 
+    }}>
       {mobileMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-30 bg-black/50" onClick={() => setMobileMenuOpen(false)} />
       )}
