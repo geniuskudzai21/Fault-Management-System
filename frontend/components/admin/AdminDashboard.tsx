@@ -144,6 +144,42 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
+  // Generate real fault trend data from actual faults
+  const generateFaultTrendData = () => {
+    const today = new Date();
+    const trendData = [];
+    
+    // Generate data for the last 7 days
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(today.getDate() - i);
+      date.setHours(0, 0, 0, 0);
+      
+      const nextDate = new Date(date);
+      nextDate.setDate(date.getDate() + 1);
+      
+      // Filter faults for this specific day
+      const dayFaults = faults.filter(fault => {
+        const faultDate = new Date(fault.reportedDate);
+        return faultDate >= date && faultDate < nextDate;
+      });
+      
+      // Count faults by status for this day
+      const reported = dayFaults.length;
+      const resolved = dayFaults.filter(f => f.status === 'Resolved').length;
+      const inProgress = dayFaults.filter(f => f.status === 'In Progress').length;
+      
+      trendData.push({
+        date: date.getTime(),
+        reported,
+        resolved,
+        inProgress
+      });
+    }
+    
+    return trendData;
+  };
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -356,7 +392,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h3 className="text-lg font-semibold text-white">Fault Trends</h3>
-                  <p className="text-sm mt-1" style={{ color: '#9ca3af' }}>Reported vs Resolved over the past 7 days</p>
+                  <p className="text-sm mt-1" style={{ color: '#9ca3af' }}>Real-time fault trends over the past 7 days</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="flex items-center gap-1 text-xs" style={{ color: '#9ca3af' }}>
@@ -369,14 +405,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
               </div>
               <div className="h-64">
                 <FaultTrendChart 
-                  data={[
-                    { date: new Date().getTime(), reported: 12, resolved: 8, inProgress: 3 },
-                    { date: new Date(Date.now() - 86400000).getTime(), reported: 15, resolved: 10, inProgress: 5 },
-                    { date: new Date(Date.now() - 172800000).getTime(), reported: 8, resolved: 14, inProgress: 2 },
-                    { date: new Date(Date.now() - 259200000).getTime(), reported: 18, resolved: 16, inProgress: 4 },
-                    { date: new Date(Date.now() - 345600000).getTime(), reported: 22, resolved: 20, inProgress: 6 },
-                    { date: new Date(Date.now() - 432000000).getTime(), reported: 25, resolved: 24, inProgress: 8 },
-                  ]}
+                  data={generateFaultTrendData()}
                   height={240}
                 />
               </div>
@@ -405,7 +434,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 mt-8">
             {/* Recent Activities Table - Takes 2 columns */}
             <div className="xl:col-span-2 rounded-2xl overflow-hidden" style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}>
-              <div className="px-6 py-5 border-b" style={{ borderColor: 'rgba(0,51,160,0.15)' }}>
+              <div className="px-4 py-4 border-b" style={{ borderColor: 'rgba(0,51,160,0.15)' }}>
                 <div>
                   <h3 className="text-lg font-semibold text-white">Recent Activities</h3>
                   <p className="text-sm mt-1" style={{ color: '#9ca3af' }}>Latest updates from the system</p>
@@ -416,10 +445,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <table className="w-full">
                   <thead>
                     <tr style={{ backgroundColor: '#0b1326' }}>
-                      <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#9ca3af' }}>Name</th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#9ca3af' }}>Type</th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#9ca3af' }}>Date</th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#9ca3af' }}>Status</th>
+                      <th className="px-3 py-2 text-left text-xs font-semibold uppercase" style={{ color: '#9ca3af' }}>Activity</th>
+                      <th className="px-3 py-2 text-left text-xs font-semibold uppercase" style={{ color: '#9ca3af' }}>Type</th>
+                      <th className="px-3 py-2 text-left text-xs font-semibold uppercase" style={{ color: '#9ca3af' }}>Date</th>
+                      <th className="px-3 py-2 text-center text-xs font-semibold uppercase" style={{ color: '#9ca3af' }}>Status</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -429,27 +458,27 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         className="border-t transition-colors hover:bg-white/5"
                         style={{ borderColor: 'rgba(0,51,160,0.08)' }}
                       >
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold" style={{ backgroundColor: 'rgba(0,51,160,0.2)', color: '#fed000' }}>
+                        <td className="px-3 py-3">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0" style={{ backgroundColor: 'rgba(0,51,160,0.2)', color: '#fed000' }}>
                               {activity.name.charAt(0).toUpperCase()}
                             </div>
-                            <div>
-                              <p className="text-sm font-medium text-white">{activity.name}</p>
-                              <p className="text-xs" style={{ color: '#9ca3af' }}>{activity.email}</p>
+                            <div className="min-w-0">
+                              <p className="text-xs font-medium text-white truncate">{activity.name}</p>
+                              <p className="text-xs" style={{ color: '#9ca3af' }} title={activity.email}>{activity.email.length > 20 ? activity.email.substring(0, 20) + '...' : activity.email}</p>
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4">
-                          <span className="px-3 py-1.5 text-xs font-medium rounded-lg inline-flex" style={{ backgroundColor: 'rgba(0,51,160,0.15)', color: '#9ca3af' }}>
+                        <td className="px-3 py-3">
+                          <span className="px-2 py-1 text-xs font-medium rounded inline-block" style={{ backgroundColor: 'rgba(0,51,160,0.15)', color: '#9ca3af' }}>
                             {activity.type}
                           </span>
                         </td>
-                        <td className="px-6 py-4">
-                          <span className="text-sm" style={{ color: '#9ca3af' }}>{formatDate(activity.date)}</span>
+                        <td className="px-3 py-3">
+                          <span className="text-xs" style={{ color: '#9ca3af' }}>{formatDate(activity.date)}</span>
                         </td>
-                        <td className="px-6 py-4">
-                          <span className={`px-3 py-1.5 text-xs font-semibold rounded-lg inline-flex ${
+                        <td className="px-3 py-3 text-center">
+                          <span className={`px-2 py-1 text-xs font-semibold rounded inline-block ${
                             activity.status === 'Completed' || activity.status === 'Resolved' || activity.status === 'Active' 
                               ? 'bg-green-500/20 text-green-400'
                               : activity.status === 'In Progress'
@@ -593,28 +622,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       <div className="space-y-3">
                         <div className="px-4 py-3 rounded-lg border-l-4" style={{ 
                           backgroundColor: 'rgba(251, 191, 36, 0.1)', 
-                          borderColor: '#fbbf24' 
+                          borderColor: '#88ff00ff' 
                         }}>
-                          <div className="flex items-center justify-between mb-1">
-                            <p className="text-xs font-medium" style={{ color: '#fbbf24' }}>GRID LOAD</p>
-                            <span className="text-xs">⚡</span>
-                          </div>
-                          <p className="text-lg font-bold text-white">{gridLoad}%</p>
-                          <div className="w-full bg-gray-700 rounded-full h-1.5 mt-2">
-                            <div 
-                              className="h-1.5 rounded-full transition-all duration-500"
-                              style={{ 
-                                width: `${gridLoad}%`,
-                                backgroundColor: gridLoad > 80 ? '#ef4444' : gridLoad > 60 ? '#f59e0b' : '#10b981'
-                              }}
-                            />
-                          </div>
-                        </div>
-                        
-                        <div className="px-4 py-3 rounded-lg border-l-4" style={{ 
-                          backgroundColor: 'rgba(96, 165, 250, 0.1)', 
-                          borderColor: '#60a5fa' 
-                        }}>
+                       
                           <div className="flex items-center justify-between mb-1">
                             <p className="text-xs font-medium" style={{ color: '#60a5fa' }}>CAPACITY UTILIZATION</p>
                             <span className="text-xs">⚡</span>

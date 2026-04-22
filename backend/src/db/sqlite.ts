@@ -104,28 +104,7 @@ export const initDb = async () => {
     console.log('Default admin user created: admin@zesa.co.zw / admin123');
   }
 
-  // Technician user
-  const technician = await db.get("SELECT * FROM users WHERE email = ?", ['tech@zesa.co.zw']);
-  if (!technician) {
-    const hashedPassword = await bcrypt.hash('tech123', 10);
-    await db.run(
-      'INSERT INTO users (name, email, password, role, area, status, employee_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      ['John Technician', 'tech@zesa.co.zw', hashedPassword, 'Technician', 'Avenues', 'active', 'TECH001']
-    );
-    console.log('Default technician user created: tech@zesa.co.zw / tech123');
-  }
-
-  // Customer user
-  const customer = await db.get("SELECT * FROM users WHERE email = ?", ['customer@gmail.com']);
-  if (!customer) {
-    const hashedPassword = await bcrypt.hash('customer123', 10);
-    await db.run(
-      'INSERT INTO users (name, email, password, role, area, status, phone, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      ['Jane Customer', 'customer@gmail.com', hashedPassword, 'Customer', 'Avenues', 'active', '+263 77 123 4567', '123 Samora Machel Ave, Harare']
-    );
-    console.log('Default customer user created: customer@gmail.com / customer123');
-  }
-
+  
   return db;
 };
 

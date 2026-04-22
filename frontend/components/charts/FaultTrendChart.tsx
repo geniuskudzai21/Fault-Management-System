@@ -31,28 +31,34 @@ const FaultTrendChart: React.FC<FaultTrendChartProps> = ({ data, height = 300 })
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
+      const date = new Date(payload[0].payload.date);
       return (
         <div className="bg-white/90 backdrop-blur-md p-3 rounded-lg shadow-lg border border-gray-200">
-          <p className="text-sm font-medium text-gray-900 mb-1">{label}</p>
-          {payload.map((entry: any, index: number) => (
-            <div key={index} className="flex items-center gap-2">
-              <div 
-                className={`w-3 h-3 rounded-full ${
-                  entry.status === FaultStatus.Resolved ? 'bg-green-500' 
-                  : entry.status === FaultStatus.InProgress ? 'bg-amber-500' 
-                  : 'bg-red-500'
-                }`}
-              />
-              <div className="text-sm">
-                <p className="font-medium text-gray-900">
-                  {entry.value} {entry.status}
-                </p>
-                <p className="text-xs text-gray-500">
-                  {new Date(entry.date).toLocaleDateString()}
-                </p>
+          <p className="text-sm font-medium text-gray-900 mb-1">{date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</p>
+          {payload.map((entry: any, index: number) => {
+            const getStatusColor = (dataKey: string) => {
+              if (dataKey === 'resolved') return 'bg-green-500';
+              if (dataKey === 'inProgress') return 'bg-amber-500';
+              return 'bg-red-500';
+            };
+            
+            const getStatusName = (dataKey: string) => {
+              if (dataKey === 'resolved') return 'Resolved';
+              if (dataKey === 'inProgress') return 'In Progress';
+              return 'Reported';
+            };
+            
+            return (
+              <div key={index} className="flex items-center gap-2">
+                <div className={`w-3 h-3 rounded-full ${getStatusColor(entry.dataKey)}`} />
+                <div className="text-sm">
+                  <p className="font-medium text-gray-900">
+                    {entry.value} {getStatusName(entry.dataKey)}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       );
     }
@@ -61,7 +67,14 @@ const FaultTrendChart: React.FC<FaultTrendChartProps> = ({ data, height = 300 })
 
   const CustomDot = (props: any) => {
     const { cx, cy, payload } = props;
-    const status = payload?.[0]?.status;
+    // Get the dataKey from the first element in payload to determine color
+    const dataKey = payload?.[0]?.dataKey || 'reported';
+    
+    const getColor = () => {
+      if (dataKey === 'resolved') return '#10B981';
+      if (dataKey === 'inProgress') return '#F59E0B';
+      return '#EF4444';
+    };
     
     return (
       <g>
@@ -69,11 +82,7 @@ const FaultTrendChart: React.FC<FaultTrendChartProps> = ({ data, height = 300 })
           cx={cx}
           cy={cy}
           r={4}
-          fill={
-            status === FaultStatus.Resolved ? '#10B981' 
-            : status === FaultStatus.InProgress ? '#F59E0B' 
-            : '#EF4444'
-          }
+          fill={getColor()}
           className="stroke-white"
           strokeWidth={2}
           style={{
@@ -85,11 +94,7 @@ const FaultTrendChart: React.FC<FaultTrendChartProps> = ({ data, height = 300 })
           cx={cx}
           cy={cy}
           r={8}
-          fill={
-            status === FaultStatus.Resolved ? '#10B981' 
-            : status === FaultStatus.InProgress ? '#F59E0B' 
-            : '#EF4444'
-          }
+          fill={getColor()}
           opacity={0.3}
           className="animate-ping"
         />
