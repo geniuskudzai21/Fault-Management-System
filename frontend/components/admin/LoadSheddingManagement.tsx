@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { User } from '../../types';
+import { Area } from '../../constants';
 import Button from '../common/Button';
 import { schedulesApi } from '../../src/api';
 import { ArrowLeftIcon, BuildingOfficeIcon, Squares2X2Icon, PlusIcon, TrashIcon, MagnifyingGlassIcon, XMarkIcon } from '../icons';
@@ -12,12 +13,13 @@ interface LoadSheddingManagementProps {
 interface LoadSheddingSchedule {
   id: string;
   area: string;
-  start_time: string;
-  end_time: string;
-  days_of_week: string[];
-  status: 'active' | 'inactive';
-  priority: 'high' | 'medium' | 'low';
-  created_at: string;
+  startTime: string;
+  endTime: string;
+  date: string;
+  status: string;
+  reason: string;
+  affectedCustomers: number;
+  createdAt: string;
 }
 
 const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, onBack }) => {
@@ -27,22 +29,31 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [showAddSchedule, setShowAddSchedule] = useState(false);
   const [newSchedule, setNewSchedule] = useState({
-    area: '',
-    start_time: '',
-    end_time: '',
-    days_of_week: [] as string[],
-    priority: 'medium'
+    area: Area.Avenues,
+    startTime: '',
+    endTime: '',
+    date: new Date().toISOString().split('T')[0],
+    reason: '',
+    affectedCustomers: 0
   });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [daysOfWeek] = useState(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']);
+  const [customArea, setCustomArea] = useState('');
+  const [showCustomArea, setShowCustomArea] = useState(false);
 
   useEffect(() => {
-    setLoading(false);
-    setSchedules([
-      { id: '1', area: 'Avenues', start_time: '06:00', end_time: '10:00', days_of_week: ['Mon', 'Wed', 'Fri'], status: 'active', priority: 'high', created_at: new Date().toISOString() },
-      { id: '2', area: 'Greenside', start_time: '10:00', end_time: '14:00', days_of_week: ['Tue', 'Thu', 'Sat'], status: 'active', priority: 'medium', created_at: new Date().toISOString() },
-      { id: '3', area: 'Sakubva', start_time: '14:00', end_time: '18:00', days_of_week: ['Mon', 'Fri'], status: 'inactive', priority: 'low', created_at: new Date().toISOString() },
-    ]);
+    const fetchSchedules = async () => {
+      try {
+        const response = await schedulesApi.getAll();
+        if (response.data) {
+          setSchedules(response.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch schedules:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSchedules();
   }, []);
 
   const filteredSchedules = schedules.filter(schedule => {
@@ -52,33 +63,57 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
   });
 
   const handleAddSchedule = async () => {
+    if (!newSchedule.area && !customArea) {
+      alert('Please select or enter an area');
+      return;
+    }
+    if (!newSchedule.startTime || !newSchedule.endTime) {
+      alert('Please enter start and end time');
+      return;
+    }
+    
     try {
-      const newId = String(schedules.length + 1);
-      setSchedules([...schedules, { ...newSchedule, id: newId, status: 'active', created_at: new Date().toISOString() }]);
-      setNewSchedule({ area: '', start_time: '', end_time: '', days_of_week: [], priority: 'medium' });
-      setShowAddSchedule(false);
+      const areaToSave = showCustomArea ? customArea : newSchedule.area;
+      const response = await schedulesApi.create({
+        area: areaToSave,
+        startTime: newSchedule.startTime,
+        endTime: newSchedule.endTime,
+        date: newSchedule.date,
+        status: 'Scheduled',
+        reason: newSchedule.reason || 'Scheduled load shedding',
+        affectedCustomers: newSchedule.affectedCustomers || 100
+      });
+      
+      if (response.success) {
+        const schedulesResponse = await schedulesApi.getAll();
+        if (schedulesResponse.data) {
+          setSchedules(schedulesResponse.data);
+        }
+        setNewSchedule({ area: Area.Avenues, startTime: '', endTime: '', date: new Date().toISOString().split('T')[0], reason: '', affectedCustomers: 0 });
+        setCustomArea('');
+        setShowAddSchedule(false);
+      }
     } catch (error: any) {
       console.error('Failed to add schedule:', error);
+      alert(error.message || 'Failed to add schedule');
     }
   };
 
   const handleDeleteSchedule = async (scheduleId: string) => {
     if (window.confirm('Are you sure you want to delete this schedule?')) {
-      setSchedules(schedules.filter(s => s.id !== scheduleId));
+      try {
+        await schedulesApi.delete(scheduleId);
+        setSchedules(schedules.filter(s => s.id !== scheduleId));
+      } catch (error) {
+        console.error('Failed to delete schedule:', error);
+      }
     }
-  };
-
-  const handleToggleDay = (day: string) => {
-    const days = newSchedule.days_of_week.includes(day)
-      ? newSchedule.days_of_week.filter(d => d !== day)
-      : [...newSchedule.days_of_week, day];
-    setNewSchedule({ ...newSchedule, days_of_week: days });
   };
 
   const stats = {
     total: schedules.length,
-    active: schedules.filter(s => s.status === 'active').length,
-    inactive: schedules.filter(s => s.status === 'inactive').length,
+    active: schedules.filter(s => s.status === 'Active').length,
+    inactive: schedules.filter(s => s.status === 'Scheduled').length,
   };
 
   if (loading) {
@@ -242,9 +277,9 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
                 <thead>
                   <tr style={{ backgroundColor: '#0b1326' }}>
                     <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#9ca3af' }}>Area</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#9ca3af' }}>Date</th>
                     <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#9ca3af' }}>Time</th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#9ca3af' }}>Days</th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#9ca3af' }}>Priority</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#9ca3af' }}>Reason</th>
                     <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#9ca3af' }}>Status</th>
                     <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider" style={{ color: '#9ca3af' }}>Actions</th>
                   </tr>
@@ -256,24 +291,17 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
                         <span className="text-sm font-medium text-white">{schedule.area}</span>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="text-sm" style={{ color: '#9ca3af' }}>{schedule.start_time} - {schedule.end_time}</span>
+                        <span className="text-sm" style={{ color: '#9ca3af' }}>{schedule.date}</span>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="flex flex-wrap gap-1">
-                          {schedule.days_of_week.map(day => (
-                            <span key={day} className="px-2 py-0.5 text-xs rounded" style={{ backgroundColor: 'rgba(0,51,160,0.15)', color: '#fed000' }}>{day}</span>
-                          ))}
-                        </div>
+                        <span className="text-sm" style={{ color: '#9ca3af' }}>{schedule.startTime} - {schedule.endTime}</span>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="px-3 py-1.5 text-xs font-medium rounded-lg" style={{ 
-                          backgroundColor: schedule.priority === 'high' ? 'rgba(220,38,38,0.15)' : schedule.priority === 'medium' ? 'rgba(245,158,11,0.15)' : 'rgba(16,185,129,0.15)',
-                          color: schedule.priority === 'high' ? '#dc2626' : schedule.priority === 'medium' ? '#f59e0b' : '#10b981'
-                        }}>{schedule.priority}</span>
+                        <span className="text-sm" style={{ color: '#9ca3af' }}>{schedule.reason}</span>
                       </td>
                       <td className="px-6 py-4">
                         <span className={`px-3 py-1.5 text-xs font-semibold rounded-lg inline-flex ${
-                          schedule.status === 'active' ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20 text-gray-400'
+                          schedule.status === 'Active' ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20 text-gray-400'
                         }`}>{schedule.status}</span>
                       </td>
                       <td className="px-6 py-4">
@@ -307,10 +335,57 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium mb-2" style={{ color: '#9ca3af' }}>Area</label>
+                  {!showCustomArea ? (
+                    <div className="space-y-2">
+                      <select
+                        value={newSchedule.area}
+                        onChange={(e) => setNewSchedule({...newSchedule, area: e.target.value})}
+                        className="w-full px-4 py-2.5 rounded-lg border focus:outline-none"
+                        style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                      >
+                        <option value={Area.Avenues} style={{ color: 'white' }}>{Area.Avenues}</option>
+                        <option value={Area.Greenside} style={{ color: 'white' }}>{Area.Greenside}</option>
+                        <option value={Area.Sakubva} style={{ color: 'white' }}>{Area.Sakubva}</option>
+                        <option value={Area.Dangamvura} style={{ color: 'white' }}>{Area.Dangamvura}</option>
+                        <option value={Area.Chikanga} style={{ color: 'white' }}>{Area.Chikanga}</option>
+                        <option value={Area.Hobhouse} style={{ color: 'white' }}>{Area.Hobhouse}</option>
+                        <option value={Area.Murambi} style={{ color: 'white' }}>{Area.Murambi}</option>
+                        <option value={Area.Yeovil} style={{ color: 'white' }}>{Area.Yeovil}</option>
+                      </select>
+                      <button
+                        onClick={() => setShowCustomArea(true)}
+                        className="text-sm underline hover:opacity-80"
+                        style={{ color: '#9ca3af' }}
+                      >
+                        + Enter custom area
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <input
+                        type="text"
+                        value={customArea}
+                        onChange={(e) => setCustomArea(e.target.value)}
+                        className="w-full px-4 py-2.5 rounded-lg border focus:outline-none"
+                        style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
+                        placeholder="Enter custom area/location"
+                      />
+                      <button
+                        onClick={() => { setShowCustomArea(false); setNewSchedule({...newSchedule, area: Area.Avenues}); }}
+                        className="text-sm underline hover:opacity-80"
+                        style={{ color: '#9ca3af' }}
+                      >
+                        + Select from predefined areas
+                      </button>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2" style={{ color: '#9ca3af' }}>Date</label>
                   <input
-                    type="text"
-                    value={newSchedule.area}
-                    onChange={(e) => setNewSchedule({...newSchedule, area: e.target.value})}
+                    type="date"
+                    value={newSchedule.date}
+                    onChange={(e) => setNewSchedule({...newSchedule, date: e.target.value})}
                     className="w-full px-4 py-2.5 rounded-lg border focus:outline-none"
                     style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
                   />
@@ -320,8 +395,8 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
                     <label className="block text-sm font-medium mb-2" style={{ color: '#9ca3af' }}>Start Time</label>
                     <input
                       type="time"
-                      value={newSchedule.start_time}
-                      onChange={(e) => setNewSchedule({...newSchedule, start_time: e.target.value})}
+                      value={newSchedule.startTime}
+                      onChange={(e) => setNewSchedule({...newSchedule, startTime: e.target.value})}
                       className="w-full px-4 py-2.5 rounded-lg border focus:outline-none"
                       style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
                     />
@@ -330,43 +405,23 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
                     <label className="block text-sm font-medium mb-2" style={{ color: '#9ca3af' }}>End Time</label>
                     <input
                       type="time"
-                      value={newSchedule.end_time}
-                      onChange={(e) => setNewSchedule({...newSchedule, end_time: e.target.value})}
+                      value={newSchedule.endTime}
+                      onChange={(e) => setNewSchedule({...newSchedule, endTime: e.target.value})}
                       className="w-full px-4 py-2.5 rounded-lg border focus:outline-none"
                       style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: '#9ca3af' }}>Days of Week</label>
-                  <div className="flex flex-wrap gap-2">
-                    {daysOfWeek.map(day => (
-                      <button
-                        key={day}
-                        onClick={() => handleToggleDay(day)}
-                        className="px-3 py-1.5 text-xs rounded-lg transition-colors"
-                        style={{ 
-                          backgroundColor: newSchedule.days_of_week.includes(day) ? '#0033a0' : 'rgba(10,10,15,0.95)',
-                          borderColor: 'rgba(0,51,160,0.2)',
-                          color: newSchedule.days_of_week.includes(day) ? '#fed000' : '#9ca3af',
-                          borderWidth: '1px'
-                        }}
-                      >{day}</button>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: '#9ca3af' }}>Priority</label>
-                  <select
-                    value={newSchedule.priority}
-                    onChange={(e) => setNewSchedule({...newSchedule, priority: e.target.value as 'low' | 'medium' | 'high'})}
+                  <label className="block text-sm font-medium mb-2" style={{ color: '#9ca3af' }}>Reason</label>
+                  <input
+                    type="text"
+                    value={newSchedule.reason}
+                    onChange={(e) => setNewSchedule({...newSchedule, reason: e.target.value})}
                     className="w-full px-4 py-2.5 rounded-lg border focus:outline-none"
                     style={{ backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
-                  >
-                    <option value="low" style={{ color: 'white' }}>Low</option>
-                    <option value="medium" style={{ color: 'white' }}>Medium</option>
-                    <option value="high" style={{ color: 'white' }}>High</option>
-                  </select>
+                    placeholder="e.g., Maintenance, High demand"
+                  />
                 </div>
               </div>
               <div className="flex justify-end gap-3 mt-6">

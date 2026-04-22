@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { User } from '../../types';
+import { Area } from '../../constants';
 import Button from '../common/Button';
 import { usersApi } from '../../src/api';
 import { ArrowLeftIcon, UserIcon, PlusIcon, TrashIcon, MagnifyingGlassIcon, Squares2X2Icon, XMarkIcon, CheckCircleIcon, ExclamationCircleIcon, MenuIcon } from '../icons';
@@ -451,13 +452,21 @@ const UserManagement: React.FC<UserManagementProps> = ({ user, onBack }) => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2" style={{ color: '#9ca3af' }}>Area</label>
-                  <input
-                    type="text"
+                  <select
                     value={newUser.area}
                     onChange={(e) => setNewUser({...newUser, area: e.target.value})}
                     className="w-full px-4 py-2.5 rounded-lg border focus:outline-none"
                     style={{ backgroundColor: '#0b1326', borderColor: 'rgba(0,51,160,0.2)', color: 'white', borderWidth: '1px' }}
-                  />
+                  >
+                    <option value={Area.Avenues} style={{ color: 'white' }}>{Area.Avenues}</option>
+                    <option value={Area.Greenside} style={{ color: 'white' }}>{Area.Greenside}</option>
+                    <option value={Area.Sakubva} style={{ color: 'white' }}>{Area.Sakubva}</option>
+                    <option value={Area.Dangamvura} style={{ color: 'white' }}>{Area.Dangamvura}</option>
+                    <option value={Area.Chikanga} style={{ color: 'white' }}>{Area.Chikanga}</option>
+                    <option value={Area.Hobhouse} style={{ color: 'white' }}>{Area.Hobhouse}</option>
+                    <option value={Area.Murambi} style={{ color: 'white' }}>{Area.Murambi}</option>
+                    <option value={Area.Yeovil} style={{ color: 'white' }}>{Area.Yeovil}</option>
+                  </select>
                 </div>
               </div>
               <div className="flex justify-end gap-3 mt-6">
