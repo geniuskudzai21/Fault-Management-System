@@ -12,7 +12,6 @@ interface AdminDashboardProps {
   onManageFaults: () => void;
   onManageSchedules: () => void;
   onGenerateReports: () => void;
-  onGenerateNewReport: () => void;
   onSystemSettings: () => void;
   onFaultsUpdate?: () => void;
   onViewAllActivities?: () => void;
@@ -34,7 +33,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onManageFaults,
   onManageSchedules,
   onGenerateReports,
-  onGenerateNewReport,
   onSystemSettings,
   onFaultsUpdate,
   onViewAllActivities
@@ -106,8 +104,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     { id: 'users', label: 'Users', icon: UserIcon, onClick: onManageUsers, badge: stats.totalUsers },
     { id: 'faults', label: 'Faults', icon: ListIcon, onClick: onManageFaults, badge: stats.pendingFaults },
     { id: 'schedules', label: 'Schedules', icon: BuildingOfficeIcon, onClick: onManageSchedules },
-    { id: 'reports', label: 'Report Overview', icon: DocumentTextIcon, onClick: onGenerateReports },
-    { id: 'generate', label: 'Generate Reports', icon: DocumentTextIcon, onClick: onGenerateNewReport },
     { id: 'settings', label: 'Settings', icon: SettingsIcon, onClick: onSystemSettings },
   ];
 
@@ -211,14 +207,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
             >
               <DocumentTextIcon className="w-5 h-5" />
               <span>Reports</span>
-            </button>
-            <button
-              onClick={() => { onGenerateNewReport(); setMobileMenuOpen(false); }}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all cursor-pointer font-medium"
-              style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}
-            >
-              <DocumentTextIcon className="w-5 h-5" />
-              <span>Generate Reports</span>
             </button>
             <button
               onClick={() => { onSystemSettings(); setMobileMenuOpen(false); }}
@@ -480,76 +468,201 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
             {/* Grid Stability Component - Takes 1 column */}
             <div className="rounded-2xl p-6" style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}>
               <div className="text-center">
-                <h3 className="text-lg font-semibold text-white mb-6">Grid Stability</h3>
+                <h3 className="text-lg font-semibold text-white mb-6 flex items-center justify-center gap-2">
+                  <span className="relative">
+                    <span className="absolute inset-0 animate-pulse" style={{ color: '#fbbf24', filter: 'blur(8px)' }}>⚡</span>
+                    <span style={{ color: '#fbbf24' }}>⚡</span>
+                  </span>
+                  Grid Stability
+                </h3>
                 
-                {/* Calculate grid stability percentage */}
+                {/* Calculate real grid stability based on multiple factors */}
                 {(() => {
                   const totalFaults = Math.max(stats.totalFaults, 1);
                   const resolvedFaults = stats.resolvedFaults;
-                  const stabilityPercentage = Math.round((resolvedFaults / totalFaults) * 100);
-                  const actualStability = Math.min(Math.max(stabilityPercentage, 85), 98); // Keep between 85-98%
+                  const inProgressFaults = stats.inProgressFaults;
+                  const pendingFaults = stats.pendingFaults;
                   
-                  // Determine status based on stability
-                  let status = 'NORMAL OPERATING RANGE';
+                  // Real stability calculation based on fault resolution and active issues
+                  const resolutionRate = (resolvedFaults / totalFaults) * 100;
+                  const activeIssueRate = (inProgressFaults / totalFaults) * 100;
+                  const pendingIssueRate = (pendingFaults / totalFaults) * 100;
+                  
+                  // More realistic stability calculation
+                  // Base score starts at 50%, then we adjust based on performance
+                  let stabilityScore = 50;
+                  
+                  // Add points for good resolution performance
+                  stabilityScore += (resolutionRate * 0.4); // Max 40 points for 100% resolution
+                  
+                  // Subtract points for active issues (but not too harshly)
+                  stabilityScore -= (activeIssueRate * 0.3); // Max 30 points deduction
+                  stabilityScore -= (pendingIssueRate * 0.2); // Max 20 points deduction
+                  
+                  // Bonus for having few total faults (indicates good system health)
+                  if (totalFaults < 10) stabilityScore += 10;
+                  else if (totalFaults < 25) stabilityScore += 5;
+                  
+                  // Ensure score stays within bounds
+                  stabilityScore = Math.max(10, Math.min(100, stabilityScore));
+                  
+                  // Determine status and colors based on real stability
+                  let status = 'OPTIMAL';
                   let statusColor = '#10b981'; // green
-                  if (actualStability < 90) {
-                    status = 'MODERATE STRESS';
+                  let electricColor = '#10b981';
+                  let pulseColor = 'rgba(16, 185, 129, 0.3)';
+                  
+                  if (stabilityScore < 70) {
+                    status = 'CRITICAL';
+                    statusColor = '#dc2626'; // red
+                    electricColor = '#ef4444';
+                    pulseColor = 'rgba(239, 68, 68, 0.3)';
+                  } else if (stabilityScore < 85) {
+                    status = 'MODERATE';
                     statusColor = '#f59e0b'; // yellow
-                  } else if (actualStability < 85) {
-                    status = 'HIGH STRESS';
-                    statusColor = '#ef4444'; // red
+                    electricColor = '#fbbf24';
+                    pulseColor = 'rgba(251, 191, 36, 0.3)';
+                  } else if (stabilityScore < 95) {
+                    status = 'STABLE';
+                    statusColor = '#3b82f6'; // blue
+                    electricColor = '#60a5fa';
+                    pulseColor = 'rgba(96, 165, 250, 0.3)';
                   }
                   
-                  // Calculate peak load based on active faults
-                  const peakLoad = Math.round((stats.inProgressFaults / Math.max(totalFaults, 1)) * 100);
+                  // Calculate grid load metrics
+                  const gridLoad = Math.round(((inProgressFaults + pendingFaults) / totalFaults) * 100);
+                  const capacityUtilization = Math.round((totalFaults / Math.max(totalFaults + stats.resolvedFaults, 1)) * 100);
                   
                   return (
                     <>
-                      {/* Gauge */}
-                      <div className="relative w-32 h-32 mx-auto mb-6">
-                        <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 120 120">
-                          {/* Background circle */}
+                      {/* Electric Grid Visualization */}
+                      <div className="relative w-40 h-40 mx-auto mb-6">
+                        {/* Animated electric pulse background */}
+                        <div 
+                          className="absolute inset-0 rounded-full animate-pulse"
+                          style={{ 
+                            backgroundColor: pulseColor,
+                            animationDuration: '2s'
+                          }}
+                        />
+                        
+                        {/* Electric grid rings */}
+                        <svg className="w-40 h-40 absolute inset-0" viewBox="0 0 160 160">
+                          {/* Outer ring */}
                           <circle
-                            cx="60"
-                            cy="60"
-                            r="50"
+                            cx="80"
+                            cy="80"
+                            r="70"
                             fill="none"
-                            stroke="rgba(0,51,160,0.2)"
-                            strokeWidth="12"
+                            stroke="rgba(251, 191, 36, 0.2)"
+                            strokeWidth="2"
+                            strokeDasharray="5 5"
+                            className="animate-spin"
+                            style={{ animationDuration: '20s' }}
                           />
-                          {/* Progress circle */}
+                          {/* Middle ring */}
                           <circle
-                            cx="60"
-                            cy="60"
+                            cx="80"
+                            cy="80"
                             r="50"
                             fill="none"
-                            stroke={statusColor}
-                            strokeWidth="12"
-                            strokeDasharray={`${2 * Math.PI * 50 * (actualStability / 100)} ${2 * Math.PI * 50}`}
+                            stroke="rgba(251, 191, 36, 0.3)"
+                            strokeWidth="2"
+                            strokeDasharray="3 3"
+                            className="animate-spin"
+                            style={{ animationDuration: '15s', animationDirection: 'reverse' }}
+                          />
+                          {/* Inner ring */}
+                          <circle
+                            cx="80"
+                            cy="80"
+                            r="30"
+                            fill="none"
+                            stroke={electricColor}
+                            strokeWidth="3"
+                            strokeDasharray={`${2 * Math.PI * 30 * (stabilityScore / 100)} ${2 * Math.PI * 30}`}
                             strokeLinecap="round"
+                            className="transition-all duration-1000"
                           />
                         </svg>
-                        <div className="absolute inset-0 flex items-center justify-center">
+                        
+                        {/* Center display */}
+                        <div className="absolute inset-0 flex flex-col items-center justify-center">
                           <div className="text-center">
-                            <p className="text-2xl font-bold text-white">{actualStability}%</p>
+                            <p className="text-3xl font-bold text-white mb-1">{Math.round(stabilityScore)}%</p>
+                            <p className="text-xs font-medium" style={{ color: statusColor }}>{status}</p>
                           </div>
                         </div>
-                      </div>
-                      
-                      {/* Status */}
-                      <div className="mb-6">
-                        <p className="text-sm font-medium" style={{ color: statusColor }}>{status}</p>
-                      </div>
-                      
-                      {/* Load Info */}
-                      <div className="space-y-3">
-                        <div className="px-4 py-3 rounded-lg" style={{ backgroundColor: 'rgba(245,158,11,0.15)' }}>
-                          <p className="text-xs font-medium" style={{ color: '#f59e0b' }}>PEAK LOAD EXPECTED</p>
-                          <p className="text-lg font-bold text-white">{peakLoad}%</p>
+                        
+                        {/* Electric bolts around the circle */}
+                        <div className="absolute inset-0">
+                          {[...Array(8)].map((_, i) => (
+                            <div
+                              key={i}
+                              className="absolute text-lg"
+                              style={{
+                                top: '50%',
+                                left: '50%',
+                                transform: `translate(-50%, -50%) rotate(${i * 45}deg) translateY(-65px)`,
+                                color: electricColor,
+                                opacity: 0.6 + (stabilityScore / 250),
+                                animation: `pulse ${2 + (i % 2)}s infinite`
+                              }}
+                            >
+                              ⚡
+                            </div>
+                          ))}
                         </div>
-                        <div className="px-4 py-3 rounded-lg" style={{ backgroundColor: 'rgba(245,158,11,0.15)' }}>
-                          <p className="text-xs font-medium" style={{ color: '#f59e0b' }}>LOAD SHEDDING STATUS</p>
-                          <p className="text-lg font-bold text-white">{stats.activeLoadShedding}%</p>
+                      </div>
+                      
+                      {/* Status indicator with electric theme */}
+                      <div className="mb-6">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full" style={{ backgroundColor: `${statusColor}20` }}>
+                          <div 
+                            className="w-2 h-2 rounded-full animate-pulse"
+                            style={{ backgroundColor: statusColor }}
+                          />
+                          <p className="text-sm font-medium" style={{ color: statusColor }}>{status}</p>
+                        </div>
+                      </div>
+                      
+                      {/* Grid Metrics */}
+                      <div className="space-y-3">
+                        <div className="px-4 py-3 rounded-lg border-l-4" style={{ 
+                          backgroundColor: 'rgba(251, 191, 36, 0.1)', 
+                          borderColor: '#fbbf24' 
+                        }}>
+                          <div className="flex items-center justify-between mb-1">
+                            <p className="text-xs font-medium" style={{ color: '#fbbf24' }}>GRID LOAD</p>
+                            <span className="text-xs">⚡</span>
+                          </div>
+                          <p className="text-lg font-bold text-white">{gridLoad}%</p>
+                          <div className="w-full bg-gray-700 rounded-full h-1.5 mt-2">
+                            <div 
+                              className="h-1.5 rounded-full transition-all duration-500"
+                              style={{ 
+                                width: `${gridLoad}%`,
+                                backgroundColor: gridLoad > 80 ? '#ef4444' : gridLoad > 60 ? '#f59e0b' : '#10b981'
+                              }}
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="px-4 py-3 rounded-lg border-l-4" style={{ 
+                          backgroundColor: 'rgba(96, 165, 250, 0.1)', 
+                          borderColor: '#60a5fa' 
+                        }}>
+                          <div className="flex items-center justify-between mb-1">
+                            <p className="text-xs font-medium" style={{ color: '#60a5fa' }}>CAPACITY UTILIZATION</p>
+                            <span className="text-xs">⚡</span>
+                          </div>
+                          <p className="text-lg font-bold text-white">{capacityUtilization}%</p>
+                          <div className="w-full bg-gray-700 rounded-full h-1.5 mt-2">
+                            <div 
+                              className="h-1.5 rounded-full transition-all duration-500 bg-blue-400"
+                              style={{ width: `${capacityUtilization}%` }}
+                            />
+                          </div>
                         </div>
                       </div>
                     </>

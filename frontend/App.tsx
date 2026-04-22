@@ -5,7 +5,6 @@ import TechnicianDashboard from './components/technician/TechnicianDashboard';
 import CustomerDashboard from './components/customer/CustomerDashboard';
 import FaultManagement from './components/admin/FaultManagement';
 import Reports from './components/admin/Reports';
-import GenerateReports from './components/admin/GenerateReports';
 import UserManagement from './components/admin/UserManagement';
 import LoadSheddingManagement from './components/admin/LoadSheddingManagement';
 import Settings from './components/admin/Settings';
@@ -72,10 +71,6 @@ const App: React.FC = () => {
 
   const handleGenerateReports = () => {
     setView('reports');
-  };
-
-  const handleGenerateNewReport = () => {
-    setView('generate-reports');
   };
 
   const handleSystemSettings = () => {
@@ -176,7 +171,6 @@ const App: React.FC = () => {
             onManageFaults={handleManageFaults}
             onManageSchedules={handleManageSchedules}
             onGenerateReports={handleGenerateReports}
-            onGenerateNewReport={handleGenerateNewReport}
             onSystemSettings={handleSystemSettings}
             onAuditLogs={handleAuditLogs}
             onFaultsUpdate={fetchFaults}
@@ -212,15 +206,6 @@ const App: React.FC = () => {
       case 'reports':
         return (
           <Reports 
-            user={user}
-            faults={faults}
-            onBack={handleBackFromReports}
-            onGenerateReports={handleGenerateNewReport}
-          />
-        );
-      case 'generate-reports':
-        return (
-          <GenerateReports 
             user={user}
             faults={faults}
             onBack={handleBackFromReports}
