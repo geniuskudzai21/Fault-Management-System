@@ -181,7 +181,10 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
   };
 
   return (
-    <div className="flex" style={{ backgroundColor: 'rgba(10,10,15,0.95)', minHeight: '100vh' }}>
+    <div className="flex" style={{ 
+      background: 'linear-gradient(135deg, #0a0a0f 0%, #1a1f3a 25%, #0f172a 50%, #1e293b 75%, #0a0a0f 100%)',
+      minHeight: '100vh' 
+    }}>
       <div className="flex-1 overflow-y-auto">
         <div className="p-4 lg:p-8">
           <h1 className="text-2xl lg:text-3xl font-bold text-white">Customer Dashboard</h1>
