@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { UserRole } from '../../constants';
 import Button from '../common/Button';
+import { EyeIcon, EyeSlashIcon } from '../icons';
 
 interface LoginScreenProps {
   onLogin: (email: string, password: string, role: string) => Promise<{ success: boolean; error?: string }>;
@@ -17,6 +18,8 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onRegister }) => {
   const [error, setError] = useState('');
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -104,8 +107,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onRegister }) => {
           <div className="w-14 h-14 mx-auto mb-3 rounded-lg flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#fed000', boxShadow: '0 0 15px rgba(254,208,0,0.5)' }}>
             <img src="/images.jpg" alt="ZESA Logo" className="w-full h-full object-cover" />
           </div>
-          <h1 className="text-lg font-bold tracking-wider" style={{ color: '#0096ff', textShadow: '0 0 10px rgba(0,150,255,0.5)' }}>NEW USER</h1>
-          <p className="text-xs mt-1" style={{ color: '#0096ff', opacity: 0.6, letterSpacing: '2px' }}>// REGISTRATION</p>
+          <h1 className="text-lg font-bold tracking-wider" style={{ color: '#0096ff', textShadow: '0 0 10px rgba(0,150,255,0.5)' }}>CREATE ACCOUNT</h1>
         </div>
 
         {error && (
@@ -141,26 +143,46 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onRegister }) => {
 
           <div>
             <label className="block text-xs font-mono mb-1" style={{ color: '#0096ff' }}>// PASSWORD</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 rounded text-sm font-mono"
-              style={{ backgroundColor: 'rgba(0,150,255,0.05)', border: '1px solid rgba(0,150,255,0.3)', color: '#0096ff' }}
-              placeholder="••••••••"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-3 py-2 pr-10 rounded text-sm font-mono"
+                style={{ backgroundColor: 'rgba(0,150,255,0.05)', border: '1px solid rgba(0,150,255,0.3)', color: '#0096ff' }}
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs"
+                style={{ color: '#0096ff' }}
+              >
+                {showPassword ? <EyeSlashIcon className="w-4 h-4" /> : <EyeIcon className="w-4 h-4" />}
+              </button>
+            </div>
           </div>
 
           <div>
             <label className="block text-xs font-mono mb-1" style={{ color: '#0096ff' }}>// CONFIRM</label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-3 py-2 rounded text-sm font-mono"
-              style={{ backgroundColor: 'rgba(0,150,255,0.05)', border: '1px solid rgba(0,150,255,0.3)', color: '#0096ff' }}
-              placeholder="••••••••"
-            />
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? 'text' : 'password'}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full px-3 py-2 pr-10 rounded text-sm font-mono"
+                style={{ backgroundColor: 'rgba(0,150,255,0.05)', border: '1px solid rgba(0,150,255,0.3)', color: '#0096ff' }}
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs"
+                style={{ color: '#0096ff' }}
+              >
+                {showConfirmPassword ? <EyeSlashIcon className="w-4 h-4" /> : <EyeIcon className="w-4 h-4" />}
+              </button>
+            </div>
           </div>
 
           <div>
@@ -179,9 +201,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onRegister }) => {
             {loading ? '>> PROCESSING...' : '>> REGISTER'}
           </Button>
 
-          <div className="text-center pt-2">
+          <div className="text-center">
             <button onClick={() => setIsLogin(true)} className="text-xs font-mono transition-colors hover:underline" style={{ color: 'oklch(90.5% 0.182 98.111)' }}>
-              // LOGIN
+              RETURN TO LOGIN
             </button>
           </div>
         </div>
@@ -244,20 +266,30 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onRegister }) => {
 
           <div>
             <label className="block text-xs font-mono mb-2" style={{ color: '#0096ff' }}>// PASSWORD</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 mb-2 rounded text-sm font-mono"
-              style={{ backgroundColor: 'rgba(0,150,255,0.05)', border: '1px solid rgba(0,150,255,0.3)', color: '#0096ff' }}
-              placeholder="••••••••"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-3 py-2 pr-10 mb-2 rounded text-sm font-mono"
+                style={{ backgroundColor: 'rgba(0,150,255,0.05)', border: '1px solid rgba(0,150,255,0.3)', color: '#0096ff' }}
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs"
+                style={{ color: '#0096ff' }}
+              >
+                {showPassword ? <EyeSlashIcon className="w-4 h-4" /> : <EyeIcon className="w-4 h-4" />}
+              </button>
+            </div>
           </div>
 
           <div className="flex items-center justify-between">
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" className="w-4 h-4 rounded" style={{ accentColor: '#0096ff' }} />
-              <span className="text-xs font-mono" style={{ color: '#0096ff' }}>REMEMBER ME</span>
+              <span className="text-xs " style={{ color: '#0096ff' }}>Remember me</span>
             </label>
             <button className="text-xs font-mono transition-colors hover:underline" style={{ color: '#0096ff' }}>
              Forgot Password?
@@ -270,13 +302,13 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onRegister }) => {
 
           <div className="text-center pt-2">
             <button onClick={() => setIsLogin(false)} className="text-xs font-mono transition-colors hover:underline" style={{ color: 'oklch(90.5% 0.182 98.111)' }}>
-              // CREATE NEW ACCOUNT
+               CREATE A NEW ACCOUNT
             </button>
           </div>
         </div>
         
         {/* Bottom neon line */}
-        <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, #ff0000, transparent)' }} />
+        <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, #fff4f4ff, transparent)' }} />
       </div>
     </div>
   );
