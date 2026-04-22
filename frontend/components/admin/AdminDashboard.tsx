@@ -517,7 +517,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     statusColor = '#dc2626'; // red
                     electricColor = '#ef4444';
                     pulseColor = 'rgba(239, 68, 68, 0.3)';
-                  } else if (stabilityScore < 85) {
+                  } else if (stabilityScore < 80) {
                     status = 'MODERATE';
                     statusColor = '#f59e0b'; // yellow
                     electricColor = '#fbbf24';
@@ -545,46 +545,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                             animationDuration: '2s'
                           }}
                         />
-                        
-                        {/* Electric grid rings */}
-                        <svg className="w-40 h-40 absolute inset-0" viewBox="0 0 160 160">
-                          {/* Outer ring */}
-                          <circle
-                            cx="80"
-                            cy="80"
-                            r="70"
-                            fill="none"
-                            stroke="rgba(251, 191, 36, 0.2)"
-                            strokeWidth="2"
-                            strokeDasharray="5 5"
-                            className="animate-spin"
-                            style={{ animationDuration: '20s' }}
-                          />
-                          {/* Middle ring */}
-                          <circle
-                            cx="80"
-                            cy="80"
-                            r="50"
-                            fill="none"
-                            stroke="rgba(251, 191, 36, 0.3)"
-                            strokeWidth="2"
-                            strokeDasharray="3 3"
-                            className="animate-spin"
-                            style={{ animationDuration: '15s', animationDirection: 'reverse' }}
-                          />
-                          {/* Inner ring */}
-                          <circle
-                            cx="80"
-                            cy="80"
-                            r="30"
-                            fill="none"
-                            stroke={electricColor}
-                            strokeWidth="3"
-                            strokeDasharray={`${2 * Math.PI * 30 * (stabilityScore / 100)} ${2 * Math.PI * 30}`}
-                            strokeLinecap="round"
-                            className="transition-all duration-1000"
-                          />
-                        </svg>
                         
                         {/* Center display */}
                         <div className="absolute inset-0 flex flex-col items-center justify-center">
