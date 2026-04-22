@@ -202,7 +202,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onRegister }) => {
           </Button>
 
           <div className="text-center">
-            <button onClick={() => setIsLogin(true)} className="text-xs font-mono transition-colors hover:underline" style={{ color: 'oklch(90.5% 0.182 98.111)' }}>
+            <button onClick={() => setIsLogin(true)} className="text-xs font-mono transition-colors hover:underline" style={{ color: '#ffffffff' }}>
               RETURN TO LOGIN
             </button>
           </div>
@@ -301,7 +301,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onRegister }) => {
           </Button>
 
           <div className="text-center pt-2">
-            <button onClick={() => setIsLogin(false)} className="text-xs font-mono transition-colors hover:underline" style={{ color: 'oklch(90.5% 0.182 98.111)' }}>
+            <button onClick={() => setIsLogin(false)} className="text-xs font-mono transition-colors hover:underline" style={{ color: '#ffffffff' }}>
                CREATE A NEW ACCOUNT
             </button>
           </div>
