@@ -21,8 +21,7 @@ const TechnicianDashboard: React.FC<TechnicianDashboardProps> = ({
   const [filterPriority, setFilterPriority] = useState<string>('all');
 
   const myFaults = useMemo(() => {
-    // Show only faults assigned to this technician
-    return faults.filter(fault => 
+        return faults.filter(fault => 
       String(fault.technicianId) === String(user.id)
     );
   }, [faults, user.id]);

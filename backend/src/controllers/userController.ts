@@ -3,7 +3,6 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { getDb } from '../db/sqlite';
 
-// Helper to format user for frontend
 const formatUser = (user: any) => ({
   id: String(user.id),
   name: user.name,

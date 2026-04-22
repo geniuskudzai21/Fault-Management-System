@@ -127,25 +127,20 @@ export const createFault = async (req: Request, res: Response) => {
   try {
     const user = (req as any).user;
     
-    // Authorization checks
     if (user.role === 'Technician') {
-      // Technicians can only create faults for themselves
       if (technicianId && String(technicianId) !== String(user.id)) {
         return res.status(403).json({ success: false, error: 'Access denied' });
       }
     } else if (user.role === 'Customer') {
-      // Customers can only create faults for themselves
       if (customerId && String(customerId) !== String(user.id)) {
         return res.status(403).json({ success: false, error: 'Access denied' });
       }
     }
-    // Admins can create faults for anyone
 
     const finalTechnicianId = technicianId || null;
     const finalStatus = status || 'Reported';
     const finalCustomerId = customerId || user.id;
     
-    // Generate fault number
     const faultNumber = `FLT-${Date.now()}`;
 
     await db.run(
@@ -169,7 +164,6 @@ export const updateFault = async (req: Request, res: Response) => {
     const { id } = req.params;
     const { status, technicianId, assignedDate, resolvedDate } = req.body;
     
-    // First get the fault to check ownership
     const fault = await db.get('SELECT * FROM faults WHERE id = ?', [id]);
     if (!fault) {
       return res.status(404).json({ success: false, error: 'Fault not found' });
@@ -177,19 +171,15 @@ export const updateFault = async (req: Request, res: Response) => {
 
     const user = (req as any).user;
     
-    // Authorization checks
     if (user.role === 'Technician') {
-      // Technicians can only update their own faults
       if (String(fault.technician_id) !== String(user.id)) {
         return res.status(403).json({ success: false, error: 'Access denied' });
       }
     } else if (user.role === 'Customer') {
-      // Customers can only update their own faults
       if (String(fault.customer_id) !== String(user.id)) {
         return res.status(403).json({ success: false, error: 'Access denied' });
       }
     }
-    // Admins can update any fault
     
     const updates: string[] = [];
     const params: any[] = [];
@@ -198,8 +188,7 @@ export const updateFault = async (req: Request, res: Response) => {
       updates.push('status = ?');
       params.push(status);
       
-      // Auto-set dates based on status
-      if (status === 'Assigned' && !assignedDate) {
+            if (status === 'Assigned' && !assignedDate) {
         updates.push('assigned_date = ?');
         params.push(new Date().toISOString());
       } else if (status === 'Resolved' && !resolvedDate) {

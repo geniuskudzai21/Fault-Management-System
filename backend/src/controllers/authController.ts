@@ -6,7 +6,6 @@ import { getDb } from '../db/sqlite';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
-// Helper to format user for frontend (id must be string, area must not be null)
 const formatUser = (user: any) => ({
   id: String(user.id),
   name: user.name,

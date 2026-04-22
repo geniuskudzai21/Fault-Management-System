@@ -16,18 +16,15 @@ const PORT = process.env.PORT || 3002;
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
-// Logger
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
   next();
 });
 
-// Auth
 app.post('/api/auth/login', login);
 app.post('/api/auth/register', register);
 app.get('/api/auth/me', authMiddleware, getMe);
 
-// Users
 app.get('/api/users', authMiddleware, adminMiddleware, getAllUsers);
 app.get('/api/users/stats', authMiddleware, getStats);
 app.get('/api/users/inspectors', authMiddleware, getInspectors);
@@ -36,7 +33,6 @@ app.put('/api/users/:id', authMiddleware, adminMiddleware, updateUser);
 app.put('/api/users/:id/status', authMiddleware, adminMiddleware, updateUserStatus);
 app.delete('/api/users/:id', authMiddleware, adminMiddleware, deleteUser);
 
-// Faults
 app.get('/api/faults', authMiddleware, getAllFaults);
 app.get('/api/faults/stats', authMiddleware, getFaultStats);
 app.get('/api/faults/:id', authMiddleware, getFaultById);
@@ -45,7 +41,6 @@ app.put('/api/faults/:id', authMiddleware, updateFault);
 app.put('/api/faults/:id/assign', authMiddleware, adminMiddleware, assignFault);
 app.delete('/api/faults/:id', authMiddleware, adminMiddleware, deleteFault);
 
-// Load Shedding Schedules
 app.get('/api/schedules', authMiddleware, getAllSchedules);
 app.get('/api/schedules/stats', authMiddleware, getScheduleStats);
 app.get('/api/schedules/active', authMiddleware, getActiveSchedules);
@@ -54,7 +49,6 @@ app.post('/api/schedules', authMiddleware, adminMiddleware, createSchedule);
 app.put('/api/schedules/:id', authMiddleware, adminMiddleware, updateSchedule);
 app.delete('/api/schedules/:id', authMiddleware, adminMiddleware, deleteSchedule);
 
-// Reports (stubs)
 app.get('/api/reports/overview', authMiddleware, (req, res) => {
   res.json({ success: true, data: { totalLicenses: 0, totalRequests: 0, totalUsers: 0 } });
 });
@@ -65,7 +59,6 @@ app.get('/api/reports/requests', authMiddleware, (req, res) => {
   res.json({ success: true, data: [] });
 });
 
-// Notifications (stubs)
 app.get('/api/notifications', authMiddleware, (req, res) => {
   res.json({ success: true, data: [] });
 });
@@ -79,12 +72,10 @@ app.delete('/api/notifications/:id', authMiddleware, (req, res) => {
   res.json({ success: true, message: 'Notification deleted' });
 });
 
-// Audit logs (stub)
 app.get('/api/audit-logs', authMiddleware, adminMiddleware, (req, res) => {
   res.json({ success: true, data: [] });
 });
 
-// Home route
 app.get('/', (req, res) => {
   res.send('ZESA Fault Reporting and Load Shedding Management API');
 });

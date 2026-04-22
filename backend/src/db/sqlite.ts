@@ -40,11 +40,11 @@ export const initDb = async () => {
       assigned_date DATETIME,
       resolved_date DATETIME,
       fault_number TEXT UNIQUE,
-      gps_location TEXT, -- JSON string {lat, lon}
-      photos TEXT, -- JSON array of photo URLs
-      signature TEXT, -- JSON string {name, timestamp}
-      resolution_data TEXT, -- JSON string with resolution steps
-      customer_feedback TEXT, -- JSON string with rating and comment
+      gps_location TEXT,
+      photos TEXT,
+      signature TEXT,
+      resolution_data TEXT,
+      customer_feedback TEXT,
       FOREIGN KEY(customer_id) REFERENCES users(id),
       FOREIGN KEY(technician_id) REFERENCES users(id)
     );
@@ -82,18 +82,15 @@ export const initDb = async () => {
       admin_notes TEXT,
       estimated_resolution_time TEXT,
       actual_resolution_time TEXT,
-      gps_location TEXT, -- JSON string {lat, lon}
-      photos TEXT, -- JSON array of photo URLs
+      gps_location TEXT,
+      photos TEXT,
       FOREIGN KEY(customer_id) REFERENCES users(id),
       FOREIGN KEY(assigned_technician_id) REFERENCES users(id)
     );
 
     `);
 
-  // Seed sample users if not exists
   const bcrypt = await import('bcryptjs');
-  
-  // Admin user
   const admin = await db.get("SELECT * FROM users WHERE email = ?", ['admin@zesa.co.zw']);
   if (!admin) {
     const hashedPassword = await bcrypt.hash('admin123', 10);

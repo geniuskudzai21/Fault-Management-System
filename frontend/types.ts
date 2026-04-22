@@ -82,7 +82,7 @@ export interface FaultResolutionData {
 
 export interface LoadSheddingImpact {
   area: Area;
-  duration: number; // in hours
+  duration: number;
   customersAffected: number;
   businessesAffected: number;
   criticalServicesAffected: string[];
@@ -108,7 +108,7 @@ export interface Fault {
   signature?: { name: string; timestamp: string };
   resolutionData?: FaultResolutionData;
   customerFeedback?: {
-    rating: number; // 1-5
+    rating: number;
     comment: string;
     submittedAt: string;
   };

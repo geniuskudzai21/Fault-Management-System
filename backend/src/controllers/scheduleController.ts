@@ -106,7 +106,6 @@ export const createSchedule = async (req: Request, res: Response) => {
   try {
     const user = (req as any).user;
     
-    // Only admins can create schedules
     if (user.role !== 'Admin') {
       return res.status(403).json({ success: false, error: 'Access denied' });
     }
@@ -134,7 +133,6 @@ export const updateSchedule = async (req: Request, res: Response) => {
     const { id } = req.params;
     const { status, startTime, endTime, reason, affectedCustomers, alternativeSupply, notes } = req.body;
     
-    // First get the schedule to check ownership
     const schedule = await db.get('SELECT * FROM load_shedding_schedules WHERE id = ?', [id]);
     if (!schedule) {
       return res.status(404).json({ success: false, error: 'Schedule not found' });
@@ -142,7 +140,6 @@ export const updateSchedule = async (req: Request, res: Response) => {
 
     const user = (req as any).user;
     
-    // Only admins can update schedules
     if (user.role !== 'Admin') {
       return res.status(403).json({ success: false, error: 'Access denied' });
     }
@@ -207,7 +204,6 @@ export const deleteSchedule = async (req: Request, res: Response) => {
     
     const user = (req as any).user;
     
-    // Only admins can delete schedules
     if (user.role !== 'Admin') {
       return res.status(403).json({ success: false, error: 'Access denied' });
     }
