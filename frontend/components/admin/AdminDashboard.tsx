@@ -423,7 +423,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     { name: 'Resolved', value: stats.resolvedFaults, percentage: Math.round((stats.resolvedFaults / Math.max(stats.totalFaults, 1)) * 100) },
                     { name: 'In Progress', value: stats.inProgressFaults, percentage: Math.round((stats.inProgressFaults / Math.max(stats.totalFaults, 1)) * 100) },
                     { name: 'Pending', value: stats.pendingFaults, percentage: Math.round((stats.pendingFaults / Math.max(stats.totalFaults, 1)) * 100) },
-                  ].filter(item => item.value > 0)}
+                  ]}
                   height={240}
                 />
               </div>
