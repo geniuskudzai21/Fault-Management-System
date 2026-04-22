@@ -241,8 +241,8 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onRegister }) => {
           <div className="w-14 h-14 mx-auto mb-3 rounded-lg flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#fed000', boxShadow: '0 0 15px rgba(254,208,0,0.5)' }}>
             <img src="/images.jpg" alt="ZESA Logo" className="w-full h-full object-cover" />
           </div>
-          <h1 className="text-lg font-bold tracking-wider" style={{ color: '#0096ff', textShadow: '0 0 10px rgba(0,150,255,0.5)' }}>ZESA SYSTEM</h1>
-          <p className="text-xs mt-1" style={{ color: '#0096ff', opacity: 0.6, letterSpacing: '2px' }}>// ACCESS PORTAL</p>
+          <h1 className="text-lg font-bold tracking-wider" style={{ color: '#0096ff', textShadow: '0 0 10px rgba(0,150,255,0.5)' }}>ZESA/ZETDC</h1>
+          <p className="text-xs mt-1" style={{ color: '#0096ff', opacity: 0.6, letterSpacing: '2px' }}>Fault Management System</p>
         </div>
 
         {error && (
