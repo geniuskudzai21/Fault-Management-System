@@ -1,7 +1,7 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { User, Fault, Notification } from '../../types';
 import { FaultStatus } from '../../constants';
-import { faultsApi } from '../../src/api';
+import { faultsApi, schedulesApi } from '../../src/api';
 import { ExclamationCircleIcon, ClockIcon, CheckCircleIcon } from '../icons';
 import NotificationsPanel from '../common/NotificationsPanel';
 
@@ -9,17 +9,22 @@ interface CustomerDashboardProps {
   user: User;
   faults: Fault[];
   onFaultsUpdate: () => void;
+  showNotifications?: boolean;
+  onCloseNotifications?: () => void;
 }
 
 const CustomerDashboard: React.FC<CustomerDashboardProps> = ({ 
   user, 
   faults,
-  onFaultsUpdate
+  onFaultsUpdate,
+  showNotifications = false,
+  onCloseNotifications
 }) => {
   const [showReportForm, setShowReportForm] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const notificationsRef = useRef<Notification[]>([]);
+  notificationsRef.current = notifications;
   const [formData, setFormData] = useState({
     address: '',
     category: 'Power Outage',
@@ -83,60 +88,37 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
         const newNotifications: Notification[] = [];
 
         // 1. Load Shedding Notifications
-        const mockLoadSheddingData = [
-          {
-            id: '1',
-            area: user.area || 'Avenues',
-            startTime: '14:00',
-            endTime: '16:00',
-            date: new Date().toISOString().split('T')[0],
-            status: 'active',
-            reason: 'Maintenance work'
-          },
-          {
-            id: '2', 
-            area: 'Avenues',
-            startTime: '18:00',
-            endTime: '20:00',
-            date: new Date().toISOString().split('T')[0],
-            status: 'scheduled',
-            reason: 'Planned outage'
-          },
-          {
-            id: '3',
-            area: 'Sakubva',
-            startTime: '10:00',
-            endTime: '12:00',
-            date: new Date().toISOString().split('T')[0],
-            status: 'active',
-            reason: 'Emergency repairs'
-          }
-        ];
+        try {
+          const schedulesResponse = await schedulesApi.getActive();
+          const loadSheddingSchedules = schedulesResponse.data || [];
 
-        // Generate load shedding notifications
-        mockLoadSheddingData.forEach(schedule => {
-          const scheduleTime = new Date(`${schedule.date} ${schedule.startTime}`);
-          const endTime = new Date(`${schedule.date} ${schedule.endTime}`);
-          const now = new Date();
+          // Generate load shedding notifications
+          loadSheddingSchedules.forEach(schedule => {
+            const scheduleTime = new Date(`${schedule.date} ${schedule.startTime}`);
+            const endTime = new Date(`${schedule.date} ${schedule.endTime}`);
+            const now = new Date();
 
-          if (schedule.area === user.area) {
-            if (schedule.status === 'active' || (scheduleTime <= now && endTime >= now)) {
-              newNotifications.push({
-                id: `load-shedding-${schedule.id}-${Date.now()}`,
-                userId: user.id,
-                type: 'load_shedding',
-                title: schedule.status === 'active' ? 'Load Shedding Active' : 'Scheduled Load Shedding',
-                message: `${schedule.status === 'active' ? 'Load shedding is currently active' : 'Scheduled load shedding'} in ${schedule.area} from ${schedule.startTime} to ${schedule.endTime}. Reason: ${schedule.reason}`,
-                timestamp: new Date().toISOString(),
-                isRead: false
-              });
+            if (schedule.area === user.area) {
+              if (schedule.status === 'active' || (scheduleTime <= now && endTime >= now)) {
+                newNotifications.push({
+                  id: `load-shedding-${schedule.id}-${Date.now()}`,
+                  userId: user.id,
+                  type: 'load_shedding',
+                  title: schedule.status === 'active' ? 'Load Shedding Active' : 'Scheduled Load Shedding',
+                  message: `${schedule.status === 'active' ? 'Load shedding is currently active' : 'Scheduled load shedding'} in ${schedule.area} from ${schedule.startTime} to ${schedule.endTime}. Reason: ${schedule.reason}`,
+                  timestamp: new Date().toISOString(),
+                  isRead: false
+                });
+              }
             }
-          }
-        });
+          });
+        } catch (error) {
+          console.error('Failed to fetch load shedding schedules:', error);
+        }
 
         // 2. Fault Status Notifications
         myFaults.forEach(fault => {
-          if (fault.status === FaultStatus.InProgress && !notifications.some(n => n.message.includes(fault.id))) {
+          if (fault.status === FaultStatus.InProgress && !notificationsRef.current.some(n => n.message.includes(fault.id))) {
             newNotifications.push({
               id: `fault-inprogress-${fault.id}-${Date.now()}`,
               userId: user.id,
@@ -146,7 +128,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
               timestamp: new Date().toISOString(),
               isRead: false
             });
-          } else if (fault.status === FaultStatus.Resolved && !notifications.some(n => n.message.includes(fault.id) && n.type === 'fault_resolved')) {
+          } else if (fault.status === FaultStatus.Resolved && !notificationsRef.current.some(n => n.message.includes(fault.id) && n.type === 'fault_resolved')) {
             newNotifications.push({
               id: `fault-resolved-${fault.id}-${Date.now()}`,
               userId: user.id,
@@ -234,36 +216,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
     const interval = setInterval(generateNotifications, 2 * 60 * 1000); // Check every 2 minutes
 
     return () => clearInterval(interval);
-  }, [user.area, user.id, myFaults, notifications]);
-
-  // Also generate notifications when faults change
-  useEffect(() => {
-    const generateFaultNotifications = () => {
-      const newNotifications: Notification[] = [];
-      
-      myFaults.forEach(fault => {
-        if (fault.status === FaultStatus.Reported && !notifications.some(n => n.message.includes(fault.id))) {
-          newNotifications.push({
-            id: `fault-reported-${fault.id}-${Date.now()}`,
-            userId: user.id,
-            type: 'new_fault',
-            title: 'Fault Reported',
-            message: `Your fault #${fault.faultNumber || fault.id} has been successfully reported and is being reviewed.`,
-            timestamp: new Date().toISOString(),
-            isRead: false
-          });
-        }
-      });
-
-      if (newNotifications.length > 0) {
-        setNotifications(prev => [...newNotifications, ...prev]
-          .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-          .slice(0, 50));
-      }
-    };
-
-    generateFaultNotifications();
-  }, [myFaults, notifications]);
+  }, [user.area, user.id, myFaults]);
 
   const handleMarkNotificationRead = (id: string) => {
     setNotifications(prev => 
@@ -276,7 +229,9 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
   };
 
   const handleCloseNotifications = () => {
-    setShowNotifications(false);
+    if (onCloseNotifications) {
+      onCloseNotifications();
+    }
   };
 
   return (

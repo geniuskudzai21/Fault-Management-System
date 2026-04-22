@@ -21,6 +21,7 @@ const App: React.FC = () => {
   const [view, setView] = useState<View>('login');
   const [faults, setFaults] = useState<Fault[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const fetchFaults = async () => {
     try {
@@ -195,6 +196,8 @@ const App: React.FC = () => {
             user={user}
             faults={faults}
             onFaultsUpdate={fetchFaults}
+            showNotifications={showNotifications}
+            onCloseNotifications={() => setShowNotifications(false)}
           />
         );
       case 'fault-management':
@@ -252,7 +255,7 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-dark-950">
       {user && view !== 'login' ? (
-        <MainLayout user={user} onLogout={handleLogout} onNavigate={handleNavigate} activeView={view}>
+        <MainLayout user={user} onLogout={handleLogout} onNavigate={handleNavigate} activeView={view} onNotifications={() => setShowNotifications(true)}>
           {renderContent()}
         </MainLayout>
       ) : (
