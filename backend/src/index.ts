@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import { initDb } from './db/sqlite';
 import { login, register, getMe } from './controllers/authController';
 import { getAllUsers, getStats, getInspectors, createUser, updateUser, updateUserStatus, deleteUser } from './controllers/userController';
-import { getAllFaults, getFaultStats, getFaultById, createFault, updateFault, assignFault } from './controllers/faultController';
+import { getAllFaults, getFaultStats, getFaultById, createFault, updateFault, assignFault, deleteFault } from './controllers/faultController';
 import { getAllSchedules, getScheduleStats, getScheduleById, createSchedule, updateSchedule, deleteSchedule, getActiveSchedules } from './controllers/scheduleController';
 import { authMiddleware, adminMiddleware } from './middleware/auth';
 
@@ -43,6 +43,7 @@ app.get('/api/faults/:id', authMiddleware, getFaultById);
 app.post('/api/faults', authMiddleware, createFault);
 app.put('/api/faults/:id', authMiddleware, updateFault);
 app.put('/api/faults/:id/assign', authMiddleware, adminMiddleware, assignFault);
+app.delete('/api/faults/:id', authMiddleware, adminMiddleware, deleteFault);
 
 // Load Shedding Schedules
 app.get('/api/schedules', authMiddleware, getAllSchedules);

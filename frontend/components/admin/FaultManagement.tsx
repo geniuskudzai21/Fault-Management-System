@@ -75,6 +75,19 @@ const FaultManagement: React.FC<FaultManagementProps> = ({
     }
   };
 
+  const deleteFault = async (faultId: string) => {
+    if (!window.confirm('Are you sure you want to delete this fault?')) return;
+    setUpdatingFault(faultId);
+    try {
+      await faultsApi.delete(faultId);
+      await onFaultsUpdate();
+    } catch (error) {
+      console.error('Failed to delete fault:', error);
+    } finally {
+      setUpdatingFault(null);
+    }
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -343,6 +356,14 @@ const FaultManagement: React.FC<FaultManagementProps> = ({
                               Assigned
                             </span>
                           )}
+                          <button
+                            onClick={() => deleteFault(fault.id)}
+                            disabled={updatingFault === fault.id}
+                            className="p-2 rounded-lg transition-colors hover:bg-red-500/20 text-red-400 ml-2"
+                            title="Delete fault"
+                          >
+                            <TrashIcon className="w-4 h-4" />
+                          </button>
                         </div>
                       </td>
                     </tr>

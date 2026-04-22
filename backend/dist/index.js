@@ -41,6 +41,7 @@ app.get('/api/faults/:id', auth_1.authMiddleware, faultController_1.getFaultById
 app.post('/api/faults', auth_1.authMiddleware, faultController_1.createFault);
 app.put('/api/faults/:id', auth_1.authMiddleware, faultController_1.updateFault);
 app.put('/api/faults/:id/assign', auth_1.authMiddleware, auth_1.adminMiddleware, faultController_1.assignFault);
+app.delete('/api/faults/:id', auth_1.authMiddleware, auth_1.adminMiddleware, faultController_1.deleteFault);
 // Load Shedding Schedules
 app.get('/api/schedules', auth_1.authMiddleware, scheduleController_1.getAllSchedules);
 app.get('/api/schedules/stats', auth_1.authMiddleware, scheduleController_1.getScheduleStats);

@@ -26,17 +26,6 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ user, onLogout, onNotificatio
       </div>
 
       <div className="flex items-center gap-4">
-        <button className="p-2.5 rounded-lg transition-colors hover:bg-white/5" style={{ color: '#9ca3af' }}>
-          <Cog6ToothIcon className="w-5 h-5" />
-        </button>
-        <button 
-          onClick={onNotifications}
-          className="p-2.5 rounded-lg transition-colors hover:bg-white/5 relative" 
-          style={{ color: '#9ca3af' }}
-        >
-          <BellIcon className="w-5 h-5" />
-          <span className="absolute top-1 right-1 w-2 h-2 rounded-full" style={{ backgroundColor: '#001a4d' }}></span>
-        </button>
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg" style={{ backgroundColor: 'rgba(0,51,160,0.2)' }}>
           <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-medium" style={{ backgroundColor: '#001a4d' }}>
             {user.name.charAt(0).toUpperCase()}

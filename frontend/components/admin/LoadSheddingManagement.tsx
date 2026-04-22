@@ -79,7 +79,7 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
         startTime: newSchedule.startTime,
         endTime: newSchedule.endTime,
         date: newSchedule.date,
-        status: 'Scheduled',
+        status: 'Active',
         reason: newSchedule.reason || 'Scheduled load shedding',
         affectedCustomers: newSchedule.affectedCustomers || 100
       });

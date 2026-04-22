@@ -5,7 +5,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  area: Area;
+  area: string;
   role: UserRole;
   isApproved?: boolean;
   registrationDate?: string;

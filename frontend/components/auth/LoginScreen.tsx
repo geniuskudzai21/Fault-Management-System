@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UserRole, Area } from '../../constants';
+import { UserRole } from '../../constants';
 import Button from '../common/Button';
 
 interface LoginScreenProps {
@@ -16,7 +16,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onRegister }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [name, setName] = useState('');
-  const [area, setArea] = useState<Area>(Area.Avenues);
+  const [address, setAddress] = useState('');
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -66,7 +66,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onRegister }) => {
         password,
         name,
         role: UserRole.Customer,
-        area
+        area: address
       });
       alert('Registration successful! You can now login as a Customer.');
       setIsLogin(true);
@@ -164,22 +164,15 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onRegister }) => {
           </div>
 
           <div>
-            <label className="block text-xs font-mono mb-1" style={{ color: '#0096ff' }}>// AREA</label>
-            <select
-              value={area}
-              onChange={(e) => setArea(e.target.value as Area)}
+            <label className="block text-xs font-mono mb-1" style={{ color: '#0096ff' }}>// ADDRESS</label>
+            <input
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
               className="w-full px-3 py-2 rounded text-sm font-mono"
               style={{ backgroundColor: 'rgba(0,150,255,0.05)', border: '1px solid rgba(0,150,255,0.3)', color: '#0096ff' }}
-            >
-              <option value={Area.Avenues}>{Area.Avenues}</option>
-              <option value={Area.Greenside}>{Area.Greenside}</option>
-              <option value={Area.Sakubva}>{Area.Sakubva}</option>
-              <option value={Area.Dangamvura}>{Area.Dangamvura}</option>
-              <option value={Area.Chikanga}>{Area.Chikanga}</option>
-              <option value={Area.Hobhouse}>{Area.Hobhouse}</option>
-              <option value={Area.Murambi}>{Area.Murambi}</option>
-              <option value={Area.Yeovil}>{Area.Yeovil}</option>
-            </select>
+              placeholder="Enter your address"
+            />
           </div>
 
           <Button onClick={handleRegister} disabled={loading} className="w-full py-2 font-mono rounded transition-all text-sm hover:scale-105" style={{ backgroundColor: '#0096ff', color: '#0a0a0f', fontWeight: 'bold', boxShadow: '0 0 15px rgba(0,150,255,0.5)' }}>

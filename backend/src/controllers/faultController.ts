@@ -263,3 +263,26 @@ export const assignFault = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, error: 'Failed to assign fault' });
   }
 };
+
+export const deleteFault = async (req: Request, res: Response) => {
+  const db = getDb();
+  if (!db) {
+    return res.status(500).json({ success: false, error: 'Database not initialized' });
+  }
+
+  try {
+    const { id } = req.params;
+    
+    const user = (req as any).user;
+    if (user.role !== 'Admin') {
+      return res.status(403).json({ success: false, error: 'Only admins can delete faults' });
+    }
+
+    await db.run('DELETE FROM faults WHERE id = ?', [id]);
+    
+    res.json({ success: true, message: 'Fault deleted successfully' });
+  } catch (error) {
+    console.error('Delete fault error:', error);
+    res.status(500).json({ success: false, error: 'Failed to delete fault' });
+  }
+};

@@ -193,6 +193,12 @@ export const faultsApi = {
       body: JSON.stringify({ technicianId }),
     });
   },
+
+  delete: async (id: string) => {
+    return fetchApi(`/faults/${id}`, {
+      method: 'DELETE',
+    });
+  },
 };
 
 export const schedulesApi = {
