@@ -142,7 +142,7 @@ const App: React.FC = () => {
     if (user) {
       const interval = setInterval(() => {
         fetchFaults();
-      }, 30000); // Poll every 30 seconds for real-time updates
+      }, 30000); 
 
       return () => clearInterval(interval);
     }
