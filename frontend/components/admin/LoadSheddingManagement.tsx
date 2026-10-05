@@ -186,7 +186,7 @@ const LoadSheddingManagement: React.FC<LoadSheddingManagementProps> = ({ user, o
             >
               <Squares2X2Icon className="w-6 h-6" />
             </button>
-            <h1 className="text-2xl lg:text-3xl font-bold text-white">Load Shedding Management</h1>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white truncate">Load Shedding Management</h1>
             <button
               onClick={() => setShowAddSchedule(true)}
               className="ml-auto px-4 py-2 rounded-lg font-medium transition-all hover:opacity-90"

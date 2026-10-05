@@ -187,7 +187,7 @@ const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
     }}>
       <div className="flex-1 overflow-y-auto">
         <div className="p-4 lg:p-8">
-          <h1 className="text-2xl lg:text-3xl font-bold text-white">Customer Dashboard</h1>
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white truncate">Customer Dashboard</h1>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
             <div className="p-6 rounded-2xl transition-all hover:scale-[1.02] cursor-pointer border" style={{ backgroundColor: 'rgba(2, 9, 29, 1)', borderColor: '#dc2626' }}>

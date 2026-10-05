@@ -1,0 +1,51 @@
+{
+  "name": "ZESA/ZETDC Fault Management System",
+  "short_name": "ZESA Faults",
+  "description": "Report and track power faults and load-shedding schedules for ZESA/ZETDC.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0a0a0f",
+  "theme_color": "#001a4d",
+  "categories": ["business", "utilities", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Report a fault",
+      "short_name": "Report",
+      "url": "/?action=report"
+    },
+    {
+      "name": "Load shedding schedule",
+      "short_name": "Schedule",
+      "url": "/?action=schedule"
+    }
+  ]
+}

@@ -74,7 +74,7 @@ const TechnicianDashboard: React.FC<TechnicianDashboardProps> = ({
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto">
         <div className="p-4 lg:p-8">
-          <h1 className="text-2xl lg:text-3xl font-bold text-white">Technician Dashboard</h1>
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white truncate">Technician Dashboard</h1>
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mt-8">

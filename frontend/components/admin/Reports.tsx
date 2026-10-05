@@ -431,7 +431,7 @@ const Reports: React.FC<ReportsProps> = ({
             >
               <Squares2X2Icon className="w-6 h-6" />
             </button>
-            <h1 className="text-2xl lg:text-3xl font-bold text-white">Reports</h1>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white truncate">Reports</h1>
           </div>
 
           <div className="rounded-2xl p-4 mb-6" style={{ backgroundColor: 'rgba(2, 9, 29, 1)' }}>

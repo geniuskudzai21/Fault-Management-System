@@ -284,7 +284,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
             >
               <Squares2X2Icon className="w-6 h-6" />
             </button>
-            <h1 className="text-2xl lg:text-3xl font-bold text-white">Admin Dashboard</h1>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white truncate">Admin Dashboard</h1>
           </div>
           
           {/* Stats Cards */}

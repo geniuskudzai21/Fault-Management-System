@@ -144,7 +144,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onBack }) => {
             >
               <Squares2X2Icon className="w-6 h-6" />
             </button>
-            <h1 className="text-2xl lg:text-3xl font-bold text-white">System Settings</h1>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white truncate">System Settings</h1>
             <button
               onClick={handleSaveSettings}
               disabled={saving}

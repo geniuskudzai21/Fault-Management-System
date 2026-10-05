@@ -9,6 +9,8 @@ import UserManagement from './components/admin/UserManagement';
 import LoadSheddingManagement from './components/admin/LoadSheddingManagement';
 import Settings from './components/admin/Settings';
 import MainLayout from './components/MainLayout';
+import InstallPrompt from './components/pwa/InstallPrompt';
+import { registerServiceWorker } from './src/pwa';
 import { Area, UserRole, FaultStatus } from './constants';
 import { Fault, User } from './types';
 import { authApi, faultsApi, setAuthToken, getAuthToken } from './src/api';
@@ -21,6 +23,10 @@ const App: React.FC = () => {
   const [faults, setFaults] = useState<Fault[]>([]);
   const [loading, setLoading] = useState(true);
   const [showNotifications, setShowNotifications] = useState(false);
+
+  useEffect(() => {
+    registerServiceWorker();
+  }, []);
 
   const fetchFaults = async () => {
     try {
@@ -246,6 +252,7 @@ const App: React.FC = () => {
       ) : (
         renderContent()
       )}
+      <InstallPrompt />
     </div>
   );
 };
