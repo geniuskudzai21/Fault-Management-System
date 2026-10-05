@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getDb } from '../db/sqlite';
+import { getDb, isForeignKeyViolation, isUniqueViolation } from '../db/postgres';
 
 const formatFault = (fault: any) => ({
   id: String(fault.id),
@@ -72,11 +72,11 @@ export const getFaultStats = async (req: Request, res: Response) => {
   }
 
   try {
-    const total = await db.get('SELECT COUNT(*) as count FROM faults');
-    const reported = await db.get("SELECT COUNT(*) as count FROM faults WHERE status = 'Reported'");
-    const assigned = await db.get("SELECT COUNT(*) as count FROM faults WHERE status = 'Assigned'");
-    const inProgress = await db.get("SELECT COUNT(*) as count FROM faults WHERE status = 'InProgress'");
-    const resolved = await db.get("SELECT COUNT(*) as count FROM faults WHERE status = 'Resolved'");
+    const total = await db.get('SELECT COUNT(*)::int as count FROM faults');
+    const reported = await db.get("SELECT COUNT(*)::int as count FROM faults WHERE status = 'Reported'");
+    const assigned = await db.get("SELECT COUNT(*)::int as count FROM faults WHERE status = 'Assigned'");
+    const inProgress = await db.get("SELECT COUNT(*)::int as count FROM faults WHERE status = 'In Progress'");
+    const resolved = await db.get("SELECT COUNT(*)::int as count FROM faults WHERE status = 'Resolved'");
 
     res.json({
       success: true,
@@ -150,6 +150,12 @@ export const createFault = async (req: Request, res: Response) => {
     res.status(201).json({ success: true, message: 'Fault created successfully' });
   } catch (error) {
     console.error('Create fault error:', error);
+    if (isForeignKeyViolation(error)) {
+      return res.status(400).json({ success: false, error: 'Unknown customer or technician' });
+    }
+    if (isUniqueViolation(error)) {
+      return res.status(409).json({ success: false, error: 'Duplicate fault number, please retry' });
+    }
     res.status(500).json({ success: false, error: 'Failed to create fault' });
   }
 };
@@ -222,6 +228,9 @@ export const updateFault = async (req: Request, res: Response) => {
     res.json({ success: true, message: 'Fault updated successfully' });
   } catch (error) {
     console.error('Update fault error:', error);
+    if (isForeignKeyViolation(error)) {
+      return res.status(400).json({ success: false, error: 'Unknown technician' });
+    }
     res.status(500).json({ success: false, error: 'Failed to update fault' });
   }
 };
@@ -249,6 +258,9 @@ export const assignFault = async (req: Request, res: Response) => {
     res.json({ success: true, message: 'Fault assigned successfully' });
   } catch (error) {
     console.error('Assign fault error:', error);
+    if (isForeignKeyViolation(error)) {
+      return res.status(400).json({ success: false, error: 'Unknown technician' });
+    }
     res.status(500).json({ success: false, error: 'Failed to assign fault' });
   }
 };

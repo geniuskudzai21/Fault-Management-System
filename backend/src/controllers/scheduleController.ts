@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getDb } from '../db/sqlite';
+import { getDb } from '../db/postgres';
 
 const formatSchedule = (schedule: any) => ({
   id: String(schedule.id),
@@ -56,11 +56,11 @@ export const getScheduleStats = async (req: Request, res: Response) => {
   }
 
   try {
-    const total = await db.get('SELECT COUNT(*) as count FROM load_shedding_schedules');
-    const scheduled = await db.get("SELECT COUNT(*) as count FROM load_shedding_schedules WHERE status = 'Scheduled'");
-    const active = await db.get("SELECT COUNT(*) as count FROM load_shedding_schedules WHERE status = 'Active'");
-    const completed = await db.get("SELECT COUNT(*) as count FROM load_shedding_schedules WHERE status = 'Completed'");
-    const cancelled = await db.get("SELECT COUNT(*) as count FROM load_shedding_schedules WHERE status = 'Cancelled'");
+    const total = await db.get('SELECT COUNT(*)::int as count FROM load_shedding_schedules');
+    const scheduled = await db.get("SELECT COUNT(*)::int as count FROM load_shedding_schedules WHERE status = 'Scheduled'");
+    const active = await db.get("SELECT COUNT(*)::int as count FROM load_shedding_schedules WHERE status = 'Active'");
+    const completed = await db.get("SELECT COUNT(*)::int as count FROM load_shedding_schedules WHERE status = 'Completed'");
+    const cancelled = await db.get("SELECT COUNT(*)::int as count FROM load_shedding_schedules WHERE status = 'Cancelled'");
 
     res.json({
       success: true,
@@ -114,7 +114,7 @@ export const createSchedule = async (req: Request, res: Response) => {
 
     await db.run(
       'INSERT INTO load_shedding_schedules (area, start_time, end_time, date, status, reason, affected_customers, alternative_supply, notes, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [area, startTime, endTime, date, finalStatus, reason, affectedCustomers, alternativeSupply ? 1 : 0, notes, new Date().toISOString()]
+      [area, startTime, endTime, date, finalStatus, reason, affectedCustomers, Boolean(alternativeSupply), notes, new Date().toISOString()]
     );
     res.status(201).json({ success: true, message: 'Schedule created successfully' });
   } catch (error) {
@@ -169,7 +169,7 @@ export const updateSchedule = async (req: Request, res: Response) => {
     }
     if (alternativeSupply !== undefined) {
       updates.push('alternative_supply = ?');
-      params.push(alternativeSupply ? 1 : 0);
+      params.push(Boolean(alternativeSupply));
     }
     if (notes !== undefined) {
       updates.push('notes = ?');
@@ -224,7 +224,7 @@ export const getActiveSchedules = async (req: Request, res: Response) => {
   }
 
   try {
-    const now = new Date().toISOString();
+    const now = new Date().toISOString().split('T')[0];
     const schedules = await db.all(`
       SELECT * FROM load_shedding_schedules 
       WHERE status = 'Active' 

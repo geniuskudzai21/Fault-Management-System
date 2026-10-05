@@ -2,7 +2,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { initDb } from './db/sqlite';
+import { initDb } from './db/postgres';
 import { login, register, getMe } from './controllers/authController';
 import { getAllUsers, getStats, getInspectors, createUser, updateUser, updateUserStatus, deleteUser } from './controllers/userController';
 import { getAllFaults, getFaultStats, getFaultById, createFault, updateFault, assignFault, deleteFault } from './controllers/faultController';
@@ -11,9 +11,19 @@ import { authMiddleware, adminMiddleware } from './middleware/auth';
 
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 3002;
+const PORT = Number(process.env.PORT) || 3002;
 
-app.use(cors());
+const allowedOrigins = (process.env.CORS_ORIGINS || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin: allowedOrigins.length > 0 ? allowedOrigins : true,
+    credentials: true,
+  })
+);
 app.use(express.json({ limit: '10mb' }));
 
 app.use((req, res, next) => {
@@ -80,10 +90,24 @@ app.get('/', (req, res) => {
   res.send('ZESA Fault Reporting and Load Shedding Management API');
 });
 
-initDb().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
-}).catch(err => {
-  console.error('Failed to initialize database:', err);
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', database: 'neon-postgres' });
 });
+
+initDb()
+  .then(() => {
+    const server = app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+
+    const shutdown = () => {
+      server.close(() => process.exit(0));
+    };
+
+    process.on('SIGTERM', shutdown);
+    process.on('SIGINT', shutdown);
+  })
+  .catch(err => {
+    console.error('Failed to initialize database:', err);
+    process.exit(1);
+  });

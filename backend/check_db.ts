@@ -1,16 +1,19 @@
+import 'dotenv/config';
+import { neon } from '@neondatabase/serverless';
 
-import sqlite3 from 'sqlite3';
-import { open } from 'sqlite';
-import path from 'path';
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) {
+  throw new Error('DATABASE_URL is not set.');
+}
+
+const sql = neon(connectionString);
 
 const check = async () => {
-    const db = await open({
-        filename: path.join(__dirname, 'database.sqlite'),
-        driver: sqlite3.Database
-    });
-    const users = await db.all('SELECT id, name, email, role FROM users');
-    console.log('Registered Users:', users);
-    await db.close();
+  const users = await sql`SELECT id, name, email, role FROM users ORDER BY id`;
+  console.log('Registered Users:', users);
 };
 
-check();
+check().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

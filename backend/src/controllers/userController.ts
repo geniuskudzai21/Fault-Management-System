@@ -1,7 +1,7 @@
 
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import { getDb } from '../db/sqlite';
+import { getDb, isForeignKeyViolation, isUniqueViolation } from '../db/postgres';
 
 const formatUser = (user: any) => ({
   id: String(user.id),
@@ -40,13 +40,13 @@ export const getStats = async (req: Request, res: Response) => {
   }
 
   try {
-    const totalUsers = await db.get('SELECT COUNT(*) as count FROM users');
-    const activeUsers = await db.get("SELECT COUNT(*) as count FROM users WHERE status = 'active'");
-    const inactiveUsers = await db.get("SELECT COUNT(*) as count FROM users WHERE status = 'inactive'");
-    const pendingUsers = await db.get("SELECT COUNT(*) as count FROM users WHERE status = 'pending'");
-    const adminCount = await db.get("SELECT COUNT(*) as count FROM users WHERE role = 'Admin'");
-    const technicianCount = await db.get("SELECT COUNT(*) as count FROM users WHERE role = 'Technician'");
-    const customerCount = await db.get("SELECT COUNT(*) as count FROM users WHERE role = 'Customer'");
+    const totalUsers = await db.get('SELECT COUNT(*)::int as count FROM users');
+    const activeUsers = await db.get("SELECT COUNT(*)::int as count FROM users WHERE status = 'active'");
+    const inactiveUsers = await db.get("SELECT COUNT(*)::int as count FROM users WHERE status = 'inactive'");
+    const pendingUsers = await db.get("SELECT COUNT(*)::int as count FROM users WHERE status = 'pending'");
+    const adminCount = await db.get("SELECT COUNT(*)::int as count FROM users WHERE role = 'Admin'");
+    const technicianCount = await db.get("SELECT COUNT(*)::int as count FROM users WHERE role = 'Technician'");
+    const customerCount = await db.get("SELECT COUNT(*)::int as count FROM users WHERE role = 'Customer'");
 
     res.json({
       success: true,
@@ -109,6 +109,9 @@ export const createUser = async (req: Request, res: Response) => {
     res.status(201).json({ success: true, message: 'User created successfully' });
   } catch (error) {
     console.error('CreateUser error:', error);
+    if (isUniqueViolation(error)) {
+      return res.status(400).json({ success: false, error: 'User already exists' });
+    }
     res.status(500).json({ success: false, error: 'Failed to create user' });
   }
 };
@@ -159,6 +162,13 @@ export const deleteUser = async (req: Request, res: Response) => {
     await db.run('DELETE FROM users WHERE id = ?', [id]);
     res.json({ success: true, message: 'User deleted successfully' });
   } catch (error) {
+    console.error('DeleteUser error:', error);
+    if (isForeignKeyViolation(error)) {
+      return res.status(409).json({
+        success: false,
+        error: 'Cannot delete a user that is linked to faults or reports. Deactivate the user instead.',
+      });
+    }
     res.status(500).json({ success: false, error: 'Failed to delete user' });
   }
 };

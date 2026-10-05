@@ -1,6 +1,6 @@
 
 import { Request, Response } from 'express';
-import { getDb } from '../db/sqlite';
+import { getDb } from '../db/postgres';
 
 const formatRequest = (req: any) => ({
   id: String(req.id),
@@ -84,15 +84,15 @@ export const getRequestStats = async (req: Request, res: Response) => {
       params.push(user.id);
     }
 
-    const total = await db.get(`SELECT COUNT(*) as count FROM requests ${whereClause}`, params);
-    const pending = await db.get(`SELECT COUNT(*) as count FROM requests ${whereClause ? whereClause + ' AND' : 'WHERE'} status = 'Pending' ${whereClause ? '' : ''}`, params);
-    const approved = await db.get(`SELECT COUNT(*) as count FROM requests ${whereClause ? whereClause + ' AND' : 'WHERE'} status = 'Approved' ${whereClause ? '' : ''}`, params);
-    const rejected = await db.get(`SELECT COUNT(*) as count FROM requests ${whereClause ? whereClause + ' AND' : 'WHERE'} status = 'Rejected' ${whereClause ? '' : ''}`, params);
+    const total = await db.get(`SELECT COUNT(*)::int as count FROM requests ${whereClause}`, params);
+    const pending = await db.get(`SELECT COUNT(*)::int as count FROM requests ${whereClause ? whereClause + ' AND' : 'WHERE'} status = 'Pending' ${whereClause ? '' : ''}`, params);
+    const approved = await db.get(`SELECT COUNT(*)::int as count FROM requests ${whereClause ? whereClause + ' AND' : 'WHERE'} status = 'Approved' ${whereClause ? '' : ''}`, params);
+    const rejected = await db.get(`SELECT COUNT(*)::int as count FROM requests ${whereClause ? whereClause + ' AND' : 'WHERE'} status = 'Rejected' ${whereClause ? '' : ''}`, params);
 
-    const pendingCount = await db.get("SELECT COUNT(*) as count FROM requests WHERE status = 'Pending'");
-    const approvedCount = await db.get("SELECT COUNT(*) as count FROM requests WHERE status = 'Approved'");
-    const rejectedCount = await db.get("SELECT COUNT(*) as count FROM requests WHERE status = 'Rejected'");
-    const assignedCount = await db.get("SELECT COUNT(*) as count FROM requests WHERE status = 'Assigned'");
+    const pendingCount = await db.get("SELECT COUNT(*)::int as count FROM requests WHERE status = 'Pending'");
+    const approvedCount = await db.get("SELECT COUNT(*)::int as count FROM requests WHERE status = 'Approved'");
+    const rejectedCount = await db.get("SELECT COUNT(*)::int as count FROM requests WHERE status = 'Rejected'");
+    const assignedCount = await db.get("SELECT COUNT(*)::int as count FROM requests WHERE status = 'Assigned'");
 
     res.json({
       success: true,
