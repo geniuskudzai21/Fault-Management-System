@@ -1,6 +1,6 @@
 /* Smooth Chart Animations */
 
-@keyframes fadeIn {
+@keyframes chartFadeIn {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -11,7 +11,7 @@
   }
 }
 
-@keyframes slideInFromLeft {
+@keyframes chartSlideInFromLeft {
   from {
     opacity: 0;
     transform: translateX(-20px);
@@ -22,7 +22,7 @@
   }
 }
 
-@keyframes slideInFromRight {
+@keyframes chartSlideInFromRight {
   from {
     opacity: 0;
     transform: translateX(20px);
@@ -33,7 +33,7 @@
   }
 }
 
-@keyframes scaleIn {
+@keyframes chartScaleIn {
   from {
     opacity: 0;
     transform: scale(0.8);
@@ -44,7 +44,7 @@
   }
 }
 
-@keyframes pulse {
+@keyframes chartPulse {
   0%, 100% {
     opacity: 1;
   }
@@ -55,20 +55,20 @@
 
 /* Chart container animations */
 .chart-container {
-  animation: fadeIn 0.6s ease-out;
+  animation: chartFadeIn 0.6s ease-out;
 }
 
 .chart-line {
-  animation: slideInFromLeft 1s ease-out;
+  animation: chartSlideInFromLeft 1s ease-out;
 }
 
 .chart-pie {
-  animation: scaleIn 0.8s ease-out;
+  animation: chartScaleIn 0.8s ease-out;
 }
 
 /* Hover effects for chart elements */
 .recharts-wrapper .recharts-tooltip-wrapper {
-  animation: fadeIn 0.3s ease-out;
+  animation: chartFadeIn 0.3s ease-out;
 }
 
 .recharts-pie-sector {
@@ -107,7 +107,7 @@
 
 /* Loading animations */
 .chart-loading {
-  animation: pulse 1.5s ease-in-out infinite;
+  animation: chartPulse 1.5s ease-in-out infinite;
 }
 
 /* Responsive chart animations */

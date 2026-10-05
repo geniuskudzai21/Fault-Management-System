@@ -31,20 +31,23 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, user, onLogout, onSet
     }
   };
 
-  const getRoleColor = () => {
-    switch (user.role) {
-      case UserRole.Admin:
-        return 'purple';
-      case UserRole.Technician:
-        return 'blue';
-      case UserRole.Customer:
-        return 'green';
-      default:
-        return 'purple';
-    }
+  // Written out in full rather than interpolated: Tailwind scans source text at
+  // build time, so `bg-${roleColor}-500/20` would never be generated.
+  const roleClasses: Record<string, { badge: string; text: string }> = {
+    [UserRole.Admin]: {
+      badge: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
+      text: 'text-purple-400',
+    },
+    [UserRole.Technician]: {
+      badge: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+      text: 'text-blue-400',
+    },
+    [UserRole.Customer]: {
+      badge: 'bg-green-500/20 text-green-400 border-green-500/30',
+      text: 'text-green-400',
+    },
   };
-
-  const roleColor = getRoleColor();
+  const role = roleClasses[user.role] ?? roleClasses[UserRole.Admin];
 
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#0b1326' }}>
@@ -57,12 +60,12 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, user, onLogout, onSet
             <div className="p-4 border-b" style={{ borderColor: 'rgba(0,51,160,0.2)' }}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold bg-${roleColor}-500/20 text-${roleColor}-400 border border-${roleColor}-500/30`}>
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold border ${role.badge}`}>
                     {user.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
                     <p className="text-white text-sm font-medium">{user.name}</p>
-                    <p className={`text-xs text-${roleColor}-400`}>{user.role}</p>
+                    <p className={`text-xs ${role.text}`}>{user.role}</p>
                   </div>
                 </div>
                 <button
