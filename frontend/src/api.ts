@@ -1,4 +1,7 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002/api';
+// Base URL of the backend API. Accepts either the origin alone or the origin
+// plus /api, so a value copied from a Render dashboard works either way.
+const rawApiUrl = import.meta.env.VITE_API_URL || '/api';
+const API_URL = rawApiUrl.replace(/\/+$/, '').replace(/\/api$/i, '') + '/api';
 
 export interface ApiResponse<T = any> {
   success: boolean;

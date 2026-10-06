@@ -39,7 +39,10 @@ Environment variables:
 | --- | --- |
 | `DATABASE_URL` | Neon pooled connection string |
 | `JWT_SECRET` | `openssl rand -base64 48` |
-| `CORS_ORIGINS` | Your Vercel URL, e.g. `https://fault-management.vercel.app` |
+
+CORS reflects any origin (auth is Bearer-token based, not cookie based), so no
+CORS allowlist is needed. Any preflight from any frontend is answered — the API
+is gated by JWTs, not by Origin origin restrictions.
 
 Render injects `PORT` automatically — do not set it. The free plan sleeps after 15
 minutes idle and cold-starts on the next request, which can take ~30s.
@@ -56,6 +59,8 @@ Add one environment variable:
 | `VITE_API_URL` | `https://<your-render-service>.onrender.com/api` |
 
 Only `VITE_`-prefixed variables reach the browser bundle, so the prefix is required.
+The client tolerates the origin with or without the trailing `/api` and any trailing
+slashes, so a value pasted straight from the Render dashboard also works.
 Remember to redeploy after changing it.
 
 ## 4. Migrating existing data from SQLite

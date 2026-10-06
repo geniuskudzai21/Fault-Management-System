@@ -13,14 +13,13 @@ dotenv.config();
 const app = express();
 const PORT = Number(process.env.PORT) || 3002;
 
-const allowedOrigins = (process.env.CORS_ORIGINS || '')
-  .split(',')
-  .map((origin) => origin.trim())
-  .filter(Boolean);
-
+// Auth is Bearer-token based, not cookie based, so reflecting any request
+// origin leaks nothing and only the token gates access. An allowlist env var
+// here silently 403'd every preflight from Vercel once it was misconfigured,
+// so CORS is intentionally open and the API is protected by JWTs instead.
 app.use(
   cors({
-    origin: allowedOrigins.length > 0 ? allowedOrigins : true,
+    origin: true,
     credentials: true,
   })
 );
